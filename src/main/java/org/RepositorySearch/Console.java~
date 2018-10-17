@@ -1,0 +1,74 @@
+package org.RepositorySearch;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+/**
+ * Console output of the repositories, when the inmemory database is filled
+ */
+public class Console extends GUIBase{
+    
+    ArrayList<String[]> properties;
+    public Console()throws SQLException{
+	super();
+	properties = new ArrayList<String[]>();
+    }
+
+    int colWidth[];
+
+    private int getConsoleWidth(){
+	//@TODO
+	return 200;
+    }
+
+    @Override
+    protected void DisplayRepoHeader(String html_url, String description){
+	for(int i=0;i<getConsoleWidth();i++){
+	    System.out.print("-");
+	}
+	System.out.println();
+	System.out.println(html_url);
+	System.out.println();
+	System.out.println(description);
+	
+	properties = new ArrayList<String[]>();
+	colWidth = new int[2];
+    }
+
+    @Override
+    protected void DisplayTopic(String name){	
+	//@TODO color
+	System.out.print("["+name+"] ");	
+    }
+
+    //Display the properties in rows
+    @Override
+    protected void DisplayRepoPropertie(String label, String value){
+	
+	if(label.length()>colWidth[0]){
+	    colWidth[0] = label.length();
+	}
+	if(value.length()>colWidth[1]){
+	    colWidth[1] = value.length();
+	}
+	
+	String prop[] = {label, value};
+	properties.add(prop);
+
+    }
+
+    public void printProperties(){
+	System.out.println();
+	for(String props[]:properties){
+	    StringBuilder label = new StringBuilder(colWidth[0]);
+	    label.setLength(colWidth[0]);
+	    label.replace(0, props[0].length(), props[0]);
+	    for(int j=props[0].length();j<label.length(); j++){
+		label.setCharAt(j, ' ');
+	    }
+	    System.out.print(label.subSequence(0, label.length()) + "\t");
+	    System.out.println(props[1]);
+	}
+    }
+
+}

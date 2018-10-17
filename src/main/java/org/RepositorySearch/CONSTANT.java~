@@ -1,0 +1,7 @@
+package org.RepositorySearch;
+
+public class CONSTANT{
+
+    public static final String Version="1.0.0";
+
+}

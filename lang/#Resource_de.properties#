@@ -1,7 +1,0 @@
-initialize_log=Verzeichnis für log Dateien kann nicht erstellt werden
-MandatoryFields=Die Felder html_url und description müssen in der select Abfrage vorhanden sein.\n Wenn Sie eine as Klausel verwenden, bitte den gleichen Namen verwenden (Repositories.html_url as html_url).
-ERROR=ERROR
-foundResults={0} Repositories gefunden. Filtern oder sortieren Sie diese mit einer SQL select Abfrage.
-resultEmpty=Suche nicht erfolgreich.
-help=Sucht nach Open Source Software mithilfe der APIs von github und gitlab.\n Benutzung: python runMain.py [Optionen] Suchabfrage.\n Die Suchabfrage kann Leerzeichen enthalten.\n Nur die Wörter -h und -na sind nicht erlaubt, da diese als Optionen interpretiert werden.\n Optionen:\n -h Ausgabe Hilfe\n -na In der Konfiguration kann ein Suffix für jede Suche festgelegt werden\n (z.B. language:java, wenn wir nur nach java Programmen suchen wollen).\n Mit dieser Option wird der Suffix deaktiviert.
-noSearchTerm=Keine Suchabfrage angegeben.

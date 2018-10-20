@@ -37,9 +37,11 @@ public enum Msg {
     
     initialize_log("Cannot create the directory {0} for the log files."),
     MandatoryFields("The fields html_url and description are mandatory in this select statement.Please supplie both.\n If you use a as clause, please choose html_url and description as the label."),
-    ERROR("[ERROR]"),
+    ERROR("[ERROR] "),
     foundResults("Found {0} repositories."),
-    resultEmpty("No results found")
+    resultEmpty("No results found"),
+    help("Searchs with apis through open source software provider (github, gitlab).\n Usage:\n python runMain.py [Options] search term \n In the search term you can use spaces.\n You cannot use -h or -na here, because this is interpreted as an option.\n Options:\n -h print this help\n -na In the configuration file you can add your favorite search extensions\n (for example language:java if you only want to search for java repositories.\n With this option this search extensions is disabled.\n "),
+    noSearchTerm("The search term is missing.")
     ;
     
     private static boolean checkEnabled = true;

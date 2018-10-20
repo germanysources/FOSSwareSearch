@@ -40,7 +40,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 public class Config{
 
     public int maxNoResults;
-    public boolean AddMyFavorites;
     public String FavoriteAdditions;
     public ArrayList<Integer> HostingProvider;
 

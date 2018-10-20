@@ -43,15 +43,44 @@ public class queryConsole{
     static{
 	System.loadLibrary("consoleWidth");
     }
+    
+    /**
+     * @param args can contain the options {-na} and the search term.
+     * The search term contains spaces by default. So first the java engine spilt the search terms and we must concatenate it again.
+     */
+    public static void main(String[] args){
 
-    public static void main(String[] args)throws Exception{
-	String searchTerm = "";
-	queryConsole qu = new queryConsole();
+	RSLogger.getInstance();
+	Msg.loadFromDisk();	
+	try{
+	    String searchTerm = null;
+	    queryConsole qu = new queryConsole();
+	    boolean addFavorite = false;
 	//concatenate the search term
-	for(String term:args){
-	    searchTerm = searchTerm + " " + term;
+	    for(String term:args){
+		if(term.equals("-na")){
+		    addFavorite = true;
+		}else if(term.equals("-h")){
+		    System.out.println(Msg.help.get());
+		    return;
+		}else{
+		    //no option it's part of the search term
+		    if(searchTerm != null)
+			searchTerm = searchTerm + " " + term;
+		    else
+			searchTerm = term;
+		}
+	    }
+	
+	    if(searchTerm == null){
+		System.out.println(Msg.ERROR.get()+Msg.noSearchTerm.get());
+		return;
+	    }
+	    qu.SearchRepos(searchTerm, addFavorite);	
+	}catch(Exception e){
+	    RSLogger.LogException(e);
+	    System.out.println(Msg.ERROR.get()+e.getMessage());
 	}
-	qu.SearchRepos(searchTerm, false);	
 	
     }
 
@@ -77,11 +106,16 @@ public class queryConsole{
 	tconnect.openBlocking();
     }
 
-    private void read(Readline readline, Console con, boolean CanFetch) {
+    private void read(Readline readline, Console con, boolean CanFetch){
 	
         readline.readline(tconnect, "sql>", input -> {
 		if(input != null && input.equals("exit")) {
 		    tconnect.close();
+		    try{
+			CreateDBScheme.getConnection().close();
+		    }catch(SQLException e){
+			RSLogger.LogExceptionMessage(e, "want to close database connection");
+		    }
 		}
 		else {
 		    ExecuteSQLCommand(con, input, CanFetch);
@@ -111,6 +145,7 @@ public class queryConsole{
 	}catch(SQLException e){
 	    System.out.println(Msg.ERROR.get() + e.getMessage());
 	}catch(IOException e){
+	    RSLogger.LogException(e);
 	    System.out.println(Msg.ERROR.get() + e.getMessage());
 	}
 	

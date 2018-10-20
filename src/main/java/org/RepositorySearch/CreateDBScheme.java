@@ -1,3 +1,25 @@
+/*
+Eclipse Public License - v 2.0
+Copyright (c) 2018 Johannes Gerbershagen <johannes.gerbershagen@kabelmail.de>
+
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v2.0
+which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v20.html
+
+NO WARRANTY:
+EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, AND TO THE EXTENT
+PERMITTED BY APPLICABLE LAW, THE PROGRAM IS PROVIDED ON AN "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS OF
+TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A PARTICULAR
+PURPOSE. Each Recipient is solely responsible for determining the
+appropriateness of using and distributing the Program and assumes all
+risks associated with its exercise of rights under this Agreement,
+including but not limited to the risks and costs of program errors,
+compliance with applicable laws, damage to or loss of data, programs
+or equipment, and unavailability or interruption of operations.
+*/
 package org.RepositorySearch;
 
 import java.sql.Connection;
@@ -30,7 +52,7 @@ public class CreateDBScheme{
 	Statement stmt = con.createStatement();
 	
 	//html url is extern visible url (for example https://github.com/kohsuke/github-api
-	stmt.executeUpdate("create table Repositories(html_url string, license_key string, license_description string, description string, planguage string, homepage string, star_count integer, forks_count integer, last_activity datetime, created_at datetime, open_issues integer)");
+	stmt.executeUpdate("create table Repositories(html_url string, license_key string, license_description string, description string, planguage string, homepage string, star_count integer, forks_count integer, last_activity datetime, created_at datetime, open_issues integer, score integer)");
 
 	stmt.executeUpdate("create table RepositoryTopics(html_url string, topic string, foreign key(html_url) references Repositories(html_url))");
 	stmt.executeUpdate("create unique index turl on RepositoryTopics(html_url, topic)");	

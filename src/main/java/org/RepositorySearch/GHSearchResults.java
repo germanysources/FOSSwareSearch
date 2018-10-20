@@ -1,3 +1,25 @@
+/*
+Eclipse Public License - v 2.0
+Copyright (c) 2018 Johannes Gerbershagen <johannes.gerbershagen@kabelmail.de>
+
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v2.0
+which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v20.html
+
+NO WARRANTY:
+EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, AND TO THE EXTENT
+PERMITTED BY APPLICABLE LAW, THE PROGRAM IS PROVIDED ON AN "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS OF
+TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A PARTICULAR
+PURPOSE. Each Recipient is solely responsible for determining the
+appropriateness of using and distributing the Program and assumes all
+risks associated with its exercise of rights under this Agreement,
+including but not limited to the risks and costs of program errors,
+compliance with applicable laws, damage to or loss of data, programs
+or equipment, and unavailability or interruption of operations.
+*/
 package org.RepositorySearch;
 
 import java.io.IOException;
@@ -17,6 +39,7 @@ import org.RepositorySearch.serialize.SGHRepository;
 public class GHSearchResults{
     GitHub account;
     SGHRepository serializer; 
+    PagedIterator it;
 
     public GHSearchResults(GitHub account)throws SQLException{
 	this.account = account;
@@ -39,14 +62,26 @@ public class GHSearchResults{
 	    sterm = term;
 
 	PagedSearchIterable sit = account.searchRepositories().q(sterm).list();
-	PagedIterator it = sit._iterator(Config.getInstance().maxNoResults);
+	it = sit._iterator(Config.getInstance().maxNoResults);
+	return fetch(Config.getInstance().maxNoResults);
+
+    }
+    
+    /**
+     * This methods fetches the results and attach them to the inmemory database
+     * @param count max. numbers of results to fetch
+     * @returns found numbers of results
+     */
+    public int fetch(int count)throws IOException, SQLException{
+	
 	int size = 0;
-	while(size < Config.getInstance().maxNoResults && it.hasNext()){
+	while(size < count && it.hasNext()){
 	    
 	    serializer.serialize((GHRepository)it.next());
 	    size++;
 	}
 	return size;
+	
 
     }
 

@@ -41,7 +41,7 @@ public class SGHRepository{
 
     private void prepareStatements()throws SQLException{
 
-	InsertRepo = con.prepareStatement("insert into Repositories(html_url, license_key, license_description, description, planguage, homepage, star_count, forks_count, last_activity, created_at, open_issues) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ");
+	InsertRepo = con.prepareStatement("insert into Repositories(html_url, license_key, license_description, description, planguage, homepage, star_count, forks_count, last_activity, created_at, open_issues, score) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ");
 	InsertTopic = con.prepareStatement("insert into RepositoryTopics values(?, ?)");
 	
     }
@@ -74,6 +74,7 @@ public class SGHRepository{
 	    InsertRepo.setDate(9, new java.sql.Date(repo.getUpdatedAt().getTime()));
 	    InsertRepo.setDate(10, new java.sql.Date(repo.getCreationDate().getTime()));
 	    InsertRepo.setInt(11, repo.getOpenIssueCount());
+	    InsertRepo.setFloat(12, new Float(repo.getScore()).intValue());
 	    InsertRepo.execute();
 	    
 	    //get the topics

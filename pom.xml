@@ -12,8 +12,8 @@
   <packaging>jar</packaging>
   
   <properties>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <findbugs-maven-plugin.version>3.0.2</findbugs-maven-plugin.version>
     <findbugs-maven-plugin.failOnError>true</findbugs-maven-plugin.failOnError>    
   </properties>
@@ -55,6 +55,11 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>2.9.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.aesh</groupId>
+      <artifactId>aesh-readline</artifactId>
+      <version>1.11</version>
     </dependency>
 
     <!-- for unit testing -->

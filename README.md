@@ -167,5 +167,4 @@ For further information see [CONTRIBUTING.md](https://github.com/germanysources/
 ## Need help? ##
 * Open an issue in the
 [tracker](https://github.com/germanysources/FOSSwareSearch/issues)
-* send an e-mail to [johannes.gerbershagen@kabelmail.de](johannes.gerbershagen@kabelmail.de).
 

@@ -2,7 +2,7 @@
 <img
 src="https://raw.githubusercontent.com/germanysources/FOSSwareSearch/master/logo.eps" alt="logo">
 
-##Idea##
+## Idea ##
 This project should search through open source software repositories and
 projects. It should use the search api of the hosting provider, if such a api
 exists. It should handle different hosting providers.
@@ -10,32 +10,32 @@ exists. It should handle different hosting providers.
 The search results are put into a inmemory database and the user can filter or
 sort them with sql queries.
 
-##Definitions##
+## Definitions ##
 *The service www.github.com is called just github.
 
-##Hosting provider##
+## Hosting provider ##
 The search api from github is included. The search api from gitlab is planned
 to include.
 
-##User interface##
+## User interface ##
 A user interface for the bash(shell) is included. Before open the program we supplie
 the search term (for example we want to know where the source code of a repository called curl is):
-```shell
+```
 python runMain.py curl in:name
 ```
 The output will be:
-```shell
+```
 Found 5 repositories. Filter or order them with your sql statement.
 sql>
 ```
 Now we can type in a sql query (for example order after stars and only with
 language c or c++):
-```shell
+```
 sel>select * from Repositories where planguage in ('C', 'C++') order by star_count asc view block
 ```
 The view block is a special extension for the output. See chapter sql
 syntax. The output looks like this:
-```shell
+```
 --------------------------------------------------------------------------------
 
 https://github.com/curl/curl
@@ -61,7 +61,7 @@ this repository.
 
 Looking for something different: Just type in a new sql select statement.
 
-##SQL Syntax##
+## SQL Syntax ##
 The complete syntax of sqlite is supported.
 
 For output there is the non-sql extension ```view block```. It displays each
@@ -69,7 +69,7 @@ repository as a block. If we omit ```view block```, we can see the
 repositories in a tabular view.
 
 A non-sql query included for fetching more results from github:
-```shell
+```
 fetch X rows from github
 ```
 It means, we want to attach X (an integer value) search results to the
@@ -77,10 +77,10 @@ database. Not all search results are put immediately into the database. For
 example only the first 20 results are put into the database. If we need more
 results, we can type this command.
 
-##Database Scheme##
+## Database Scheme ##
 In the table Repositories the repositories are stored with the following
 properties:
-* html_url (for example https://github.com/curl/curl
+* html_url (for example https://github.com/curl/curl)
 * description Projet description (string)
 * license_key (string)
 * license_description (string)
@@ -98,7 +98,7 @@ fields:
 * html_url (foreign key to Repositories.html_url)
 * topic (string)
 
-##Configuration##
+## Configuration ##
 The configuration is saved in the file config.json (as can be seen in the javascript object notation).
 Here we can control the following parameters.
 
@@ -117,8 +117,8 @@ available. It's recommended to choose a little number like 10 or 20.
 * **HostingProvider**: An array, which hosting providers are used. Each hosting
     provider has a unique key (1 stands for github.com, 2 stands for gitlab.com).
 
-##Build##
-###Dependencies###
+## Build ##
+### Dependencies ###
 Maven is used for building the java part. Except the artifacts:
 ```xml
     <dependency>
@@ -140,7 +140,7 @@ all dependencies are available in the central maven repository.
 The artifact docfetcher-util is util package from
 [https://sourceforge.net/p/docfetcher/code/ci/master/tree/](https://sourceforge.net/p/docfetcher/code/ci/master/tree/). The
 jar must created manually and load into maven:
-```shell
+```
 mvn install:install-file -D file=<path to your jar> -DgroupId=net.sourceforge -DartifactId=docfetcher-util -Dversion=1.0.0 -Dpackaging=jar
 ```
 It is not the best way and in further releases it will be included in your
@@ -153,18 +153,18 @@ fork contains some necessary extensions for this application. The pull request
 [#463](https://github.com/kohsuke/github-api/pull/463) to the parent repository is still open. When it is included in the
 parent repository, this dependency will be available in the central maven repository.
 
-##Notes##
+## Notes ##
 This application uses preview features from the [github api v3](https://developer.github.com/v3/). This preview
 features can be changed without any notice. So we don't have a forerun to change the
 application, if the preview features changes.
 
-##Contributing##
+## Contributing ##
 Contributions are welcome. If you know an open source hosting provider, which
 can be included in this application, you are welcome the integrate this
 provider in the application.
 For further information see [CONTRIBUTING.md](https://github.com/germanysources/FOSSwareSearch/blob/master/CONTRIBUTING.md).
 
-##Need help?##
+## Need help? ##
 * Open an issue in the
 [tracker](https://github.com/germanysources/FOSSwareSearch/issues
 * send an e-mail to [johannes.gerbershagen@kabelmail.de](mail:johannes.gerbershagen@kabelmail.de).

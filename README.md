@@ -2,6 +2,9 @@
 <img
 src="https://raw.githubusercontent.com/germanysources/FOSSwareSearch/master/logo.eps" alt="logo">
 
+## Current Status ##
+* experimental
+* feature not fully implemented
 ## Idea ##
 This project should search through open source software repositories and
 projects. It should use the search api of the hosting provider, if such a api
@@ -31,7 +34,7 @@ sql>
 Now we can type in a sql query (for example order after stars and only with
 language c or c++):
 ```
-sel>select * from Repositories where planguage in ('C', 'C++') order by star_count asc view block
+sql>select * from Repositories where planguage in ('C', 'C++') order by star_count asc view block
 ```
 The view block is a special extension for the output. See chapter sql
 syntax. The output looks like this:

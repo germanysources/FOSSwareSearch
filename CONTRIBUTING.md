@@ -6,6 +6,7 @@ newest commit.
 Everytime a new major release is created, the master branch should be copied
 in extra branch. So we have access to all major releases.
 When changing a former major release, a new development branch should be open.
+The current development brnach can contain minor extensions and bugfixes.
 
 ##Contributing##
 As descriped in the

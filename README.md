@@ -11,7 +11,7 @@ The search results are put into a inmemory database and the user can filter or
 sort them with sql queries.
 
 ## Definitions ##
-*The service www.github.com is called just github.
+* The service www.github.com is called just github.
 
 ## Hosting provider ##
 The search api from github is included. The search api from gitlab is planned
@@ -68,7 +68,7 @@ For output there is the non-sql extension ```view block```. It displays each
 repository as a block. If we omit ```view block```, we can see the
 repositories in a tabular view.
 
-A non-sql query included for fetching more results from github:
+A non-sql query is included for fetching more results from github:
 ```
 fetch X rows from github
 ```
@@ -81,7 +81,7 @@ results, we can type this command.
 In the table Repositories the repositories are stored with the following
 properties:
 * html_url (for example https://github.com/curl/curl)
-* description Projet description (string)
+* description Project description (string)
 * license_key (string)
 * license_description (string)
 * planguage main programming language (string)
@@ -105,13 +105,13 @@ Here we can control the following parameters.
 For searching with github:
 * **maxNoResults**: The numbers of results, that are put into database after
 executing the search query. If more results are available, we can fetch them
-extra. This are also the number of results, which are fetched from one api
+extra. This is also the number of results, which are fetched from one api
 call. If we choose here 500, everytime 500 search results are fetched, if
 available. It's recommended to choose a little number like 10 or 20.
 
 * **FavoriteAdditions**: Here we can attach to the search term a suffix (for
  example ```language:C++```, if we only interested in C++
- programms. [At](https://help.github.com/articles/searching-for-repositories/)
+ programms). [At](https://help.github.com/articles/searching-for-repositories/)
  we can take a look at the syntax for this parameter.
 
 * **HostingProvider**: An array, which hosting providers are used. Each hosting
@@ -143,7 +143,7 @@ jar must created manually and load into maven:
 ```
 mvn install:install-file -D file=<path to your jar> -DgroupId=net.sourceforge -DartifactId=docfetcher-util -Dversion=1.0.0 -Dpackaging=jar
 ```
-It is not the best way and in further releases it will be included in your
+It is not the best way and in further releases it will be included in our
 installation.
 
 The artifact github-api version 1.96 is compiled from the source code of the
@@ -156,7 +156,7 @@ parent repository, this dependency will be available in the central maven reposi
 ## Notes ##
 This application uses preview features from the [github api v3](https://developer.github.com/v3/). This preview
 features can be changed without any notice. So we don't have a forerun to change the
-application, if the preview features changes.
+application, if the preview features are changing.
 
 ## Contributing ##
 Contributions are welcome. If you know an open source hosting provider, which
@@ -166,6 +166,6 @@ For further information see [CONTRIBUTING.md](https://github.com/germanysources/
 
 ## Need help? ##
 * Open an issue in the
-[tracker](https://github.com/germanysources/FOSSwareSearch/issues
-* send an e-mail to [johannes.gerbershagen@kabelmail.de](mail:johannes.gerbershagen@kabelmail.de).
+[tracker](https://github.com/germanysources/FOSSwareSearch/issues)
+* send an e-mail to [johannes.gerbershagen@kabelmail.de](johannes.gerbershagen@kabelmail.de).
 

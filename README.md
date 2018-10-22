@@ -156,10 +156,16 @@ fork contains some necessary extensions for this application. The pull request
 [#463](https://github.com/kohsuke/github-api/pull/463) to the parent repository is still open. When it is included in the
 parent repository, this dependency will be available in the central maven repository.
 
+### C part ###
+The application contains a short native c part. This must be build extra with the python script [make.py](https://github.com/germanysources/FOSSwareSearch/blob/master/make.py). The python script works under linux. It is planned to replace it with a makefile.
+
 ## Notes ##
 This application uses preview features from the [github api v3](https://developer.github.com/v3/). This preview
 features can be changed without any notice. So we don't have a forerun to change the
 application, if the preview features are changing.
+
+## System/Library requirements ##
+The application was tested on jre 8 with the bash shell. The windows shell isn't fully supported in this version.
 
 ## Contributing ##
 Contributions are welcome. If you know an open source hosting provider, which

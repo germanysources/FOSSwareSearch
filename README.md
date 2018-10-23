@@ -6,12 +6,15 @@ src="https://raw.githubusercontent.com/germanysources/FOSSwareSearch/master/logo
 * experimental
 * feature not fully implemented
 ## Idea ##
-This project should search through open source software repositories and
-projects. It should use the search api of the hosting provider, if such a api
+This application should help us to find open source projects and software repositories.
+It should use the search api of the hosting provider, if such a api
 exists. It should handle different hosting providers.
+The search scope are projects, not issues or questions.
 
 The search results are put into a inmemory database and the user can filter or
 sort them with sql queries.
+The inmemory has a big advantage. When a query doesn't return exactly what we needed,
+we can apply a granular filter with a sql query and we don't have to build a complex ui.
 
 ## Definitions ##
 * The service www.github.com is called just github.
@@ -62,7 +65,7 @@ First the html url is shown, afterwards the description and the topics (if they 
 We typed ```select * from Repositories```, so all properties are shown for
 this repository.
 
-Looking for something different: Just type in a new sql select statement.
+After the executing the sql query, we can type the next sql query or the command ```exit``` to quit the application.
 
 ## SQL Syntax ##
 The complete syntax of sqlite is supported.
@@ -79,6 +82,9 @@ It means, we want to attach X (an integer value) search results to the
 database. Not all search results are put immediately into the database. For
 example only the first 20 results are put into the database. If we need more
 results, we can type this command.
+
+### Quit ###
+Exit the application with ```exit``` command.
 
 ## Database Scheme ##
 In the table Repositories the repositories are stored with the following

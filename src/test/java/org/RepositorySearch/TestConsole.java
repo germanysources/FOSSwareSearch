@@ -4,7 +4,9 @@ import java.util.regex.MatchResult;
 import java.sql.SQLException;
 import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Ignore;
 
+@Ignore
 public class TestConsole{
 
     /**

@@ -21,24 +21,39 @@ compliance with applicable laws, damage to or loss of data, programs
 or equipment, and unavailability or interruption of operations.
 
 '''
-import os
+import os, platform
 from os.path import join
 import sys
 
 def execute(cmd_parts):
+    print(' '.join(cmd_parts))
     os.system(' '.join(cmd_parts))
 
+is_windows = 'windows' in platform.system().lower()
 javah = join(os.environ['JAVA_HOME'], 'bin', 'javah')
 classpath=join('target', 'classes')
 
 HeaderFile=join('src', 'main', 'nativeC', 'Console.h')
 ImplFile=join('src', 'main', 'nativeC', 'Console.c')
 
-print(HeaderFile)
-print(ImplFile)
-execute([javah, '-classpath', classpath, '-o', HeaderFile])
+include = []
+#collect library headers
+for root, dirs, files in os.walk(join(os.environ['JAVA_HOME'], 'include')):
+    for dirname in dirs:
+        include.append('-I\"'+join(root, dirname)+'\"')
+include.append('-I\"'+join(os.environ['JAVA_HOME'], 'include')+'\"')
 
-execute(["gcc -std=c99 -fPIC -I\"$JAVA_HOME/include\" -I\"$JAVA_HOME/include/linux\" -shared -o libConsoleWidth.so",
+execute([javah, '-classpath', classpath, '-o', HeaderFile, 'org.RepositorySearch.Console'])
+
+output = ''
+if is_windows:
+    output = 'ConsoleWidth.dll'
+else:
+    output = 'libConsoleWidth.so'
+
+execute(["gcc -std=c99 -fPIC",  ' '.join(include),
+         "-shared -o",
+         output,
          ImplFile
 ])
 

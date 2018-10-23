@@ -36,8 +36,12 @@ def execute(cmd_parts):
 
 # Recursively collect library jars
 jars = []
-jars.append('target/classes')
-for root, dirs, files in os.walk('target/dependency'):
+if os.access(join('target', 'FOSSwareSearch-1.0.0.jar'), os.F_OK):
+    jars.append(join('target', 'FOSSwareSearch-1.0.0.jar'))
+else:
+    jars.append(join('target', 'classes'))
+
+for root, dirs, files in os.walk(join('target', 'dependency')):
     for filename in files:
         jars.append(join(root, filename))
 

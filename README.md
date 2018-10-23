@@ -1,6 +1,6 @@
 # Free and open source software search engine #
 <img
-src="https://raw.githubusercontent.com/germanysources/FOSSwareSearch/master/logo.eps" alt="logo">
+src="https://raw.githubusercontent.com/germanysources/FOSSwareSearch/master/docs/logo.png" alt="logo">
 
 ## Current Status ##
 * experimental
@@ -129,15 +129,7 @@ available. It's recommended to choose a little number like 10 or 20.
 
 ## Build ##
 ### Dependencies ###
-Maven is used for building the java part. Except the artifacts:
-```xml
-    <dependency>
-      <groupId>net.sourceforge</groupId>
-      <artifactId>docfetcher-util</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-```
-and
+Maven is used for building the java part. Except the artifact:
 ```xml
     <dependency>
       <groupId>org.kohsuke</groupId>
@@ -147,24 +139,23 @@ and
 ```
 all dependencies are available in the central maven repository.
 
-The artifact docfetcher-util is util package from
-[https://sourceforge.net/p/docfetcher/code/ci/master/tree/](https://sourceforge.net/p/docfetcher/code/ci/master/tree/). The
-jar must created manually and load into maven:
-```
-mvn install:install-file -D file=<path to your jar> -DgroupId=net.sourceforge -DartifactId=docfetcher-util -Dversion=1.0.0 -Dpackaging=jar
-```
-It is not the best way and in further releases it will be included in our
-installation.
-
 The artifact github-api version 1.96 is compiled from the source code of the
 fork
 [germanysources/github-api](https://github.com/germanysources/github-api). This
 fork contains some necessary extensions for this application. The pull request
 [#463](https://github.com/kohsuke/github-api/pull/463) to the parent repository is still open. When it is included in the
-parent repository, this dependency will be available in the central maven repository.
+parent repository, this dependency will be available in the central maven
+repository.
+
+Now we can download the fork, install it one the local machine with the
+command ```mvn install```. Then the java part can be build.
+
 
 ### C part ###
-The application contains a short native c part. This must be build extra with the python script [make.py](https://github.com/germanysources/FOSSwareSearch/blob/master/make.py). The python script works under linux. It is planned to replace it with a makefile.
+The application contains a short native c part. This must be build extra with
+the python script
+[make.py](https://github.com/germanysources/FOSSwareSearch/blob/master/make.py). The
+python script should compile, if gcc is installed.
 
 ## Notes ##
 This application uses preview features from the [github api v3](https://developer.github.com/v3/). This preview

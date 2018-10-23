@@ -28,10 +28,8 @@ import java.util.ResourceBundle;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
-import net.sourceforge.docfetcher.util.AppUtil;
-import net.sourceforge.docfetcher.util.ClassPathHack;
-import net.sourceforge.docfetcher.util.Util;
-import net.sourceforge.docfetcher.util.annotations.NotNull;
+import org.RepositorySearch.ClassPathHack;
+import org.RepositorySearch.annotations.NotNull;
 
 public enum Msg {
     

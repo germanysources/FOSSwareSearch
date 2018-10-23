@@ -41,7 +41,7 @@ public class queryConsole{
     TerminalConnection tconnect;
     
     static{
-	System.loadLibrary("consoleWidth");
+	System.loadLibrary("ConsoleWidth");
     }
     
     /**

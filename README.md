@@ -13,11 +13,12 @@ The search scope are projects, not issues or questions.
 
 The search results are put into a inmemory database and the user can filter or
 sort them with sql queries.
-The inmemory has a big advantage. When a query doesn't return exactly what we needed,
+The inmemory database has a big advantage. When a query doesn't return exactly what we needed,
 we can apply a granular filter with a sql query and we don't have to build a complex ui.
 
 ## Definitions ##
-* The service www.github.com is called just github.
+* The service www.github.com is called just github
+* Query without the prefix sql stands for the search term, we send to the hosting provider like github or gitlab.
 
 ## Hosting provider ##
 The search api from github is included. The search api from gitlab is planned

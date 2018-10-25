@@ -38,6 +38,7 @@ public class queryConsole{
     
     GitHub ghaccount;
     GHSearchResults ghres;
+    GLSearch glres;
     TerminalConnection tconnect;
     
     static{
@@ -91,6 +92,7 @@ public class queryConsole{
 	CreateDBScheme.forRepository();
 	ghaccount = GitHub.connectAnonymously();
 	ghres = new GHSearchResults(ghaccount);
+	glres = new GLSearch("https://gitlab.com/api/v4");
  	tconnect = new TerminalConnection();
     }
 
@@ -161,7 +163,7 @@ public class queryConsole{
 		found += SearchReposGitHub(term, AddMyFavorites);
 		break;
 	    case CONSTANT.TypeGitLab:
-		//@not implemented yet
+		found += glres.attachSearchResults(term);
 		break;
 	    }
 

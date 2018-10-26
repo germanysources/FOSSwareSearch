@@ -56,11 +56,11 @@ public class GHSearchResults{
     public int query(String term, boolean AddMyFavorites)throws IOException, SQLException{
 	
 	String sterm;
-	if(AddMyFavorites)
+	if(AddMyFavorites && Config.getInstance().FavoriteAdditions != null)
 	    sterm = term + " " + Config.getInstance().FavoriteAdditions;
 	else
 	    sterm = term;
-
+	
 	PagedSearchIterable sit = account.searchRepositories().q(sterm).list();
 	it = sit._iterator(Config.getInstance().maxNoResults);
 	return fetch(Config.getInstance().maxNoResults);

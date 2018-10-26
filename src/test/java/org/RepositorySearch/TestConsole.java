@@ -5,9 +5,16 @@ import java.sql.SQLException;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.Ignore;
+import org.junit.BeforeClass;
 
-@Ignore
 public class TestConsole{
+   
+    static queryConsole qu;
+
+    @BeforeClass
+    public static void setup()throws Exception{
+	qu = new queryConsole();
+    }
 
     /**
      * The regular expression for fetching more rows.
@@ -15,7 +22,6 @@ public class TestConsole{
     @Test
     public void regexFetchRows()throws Exception{
 	
-	queryConsole qu = new queryConsole();
 	//don't match
 	String dont = "fetch abc from github";
 	try{
@@ -27,6 +33,20 @@ public class TestConsole{
 	MatchResult mr = qu.regexForFetch(does);
 	Assert.assertTrue(does + " should match", mr.groupCount()>0);
 	Assert.assertEquals("row count", new Integer(3), new Integer(mr.group(1)));
+
+    }
+
+    @Test
+    public void StartNewSearch()throws Exception{
+
+	//different command
+	Assert.assertFalse("different command", qu.StartNewSearch("foss"));
+	//only new search without the query term
+	Assert.assertFalse("no search term supplied", qu.StartNewSearch("new search"));
+	
+	//new search with query term
+	Assert.assertTrue("should start a new search", qu.StartNewSearch("new search foss search"));
+	Assert.assertEquals("search term", "foss search", queryConsole.searchTerm);
 
     }
 

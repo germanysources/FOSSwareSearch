@@ -39,8 +39,9 @@ import com.fasterxml.jackson.core.JsonParseException;
  */
 public class Config{
 
+    public String GitLabToken;
     public int maxNoResults;
-    public String FavoriteAdditions;
+    public String FavoriteAdditions, InitialSQLQuery;
     public ArrayList<Integer> HostingProvider;
 
     private static Config inst;

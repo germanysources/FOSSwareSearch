@@ -43,30 +43,31 @@ public class GLRequester{
     MediaType jsonMediaType;
     //the shared url for all calls
     String ApiUrl;
-    //the personal access token
-    String token;
     
     private static GLRequester mySelf;
 
-    public static GLRequester getInstance(String ApiUrl){
+    public static GLRequester getInstance(String ApiUrl)throws IOException{
 	if(mySelf == null)
 	    mySelf = new GLRequester(ApiUrl);
 	return mySelf;
     }
 
-    public GLRequester(String ApiUrl){
+    public GLRequester(String ApiUrl)throws IOException{
 	jsonMediaType = MediaType.parse("application/json; charset=utf-8");
 	HttpClient = new OkHttpClient();
 	this.ApiUrl = ApiUrl;
-	this.token = token;
     }
 
     private Response get(String url)throws IOException{
-	Request request = new Request.Builder()
-	    .url(url)
-	    .addHeader("PRIVATE-TOKEN", token)	    
-	    .get()
-	    .build();
+	
+	if(Config.getInstance().GitLabToken==null){
+	    throw new IOException(Msg.NoGitLabToken.get());
+	}
+	Request request = new Request.Builder()	    
+		.url(url)
+		.addHeader("PRIVATE-TOKEN", Config.getInstance().GitLabToken)	    
+		.get()
+		.build();
 
 	Response res = HttpClient.newCall(request).execute();
 	if(!res.isSuccessful()){

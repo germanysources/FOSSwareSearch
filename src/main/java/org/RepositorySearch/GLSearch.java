@@ -32,6 +32,7 @@ import okhttp3.Response;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 
 /**
  * Execute search at gitlab and put the results into the inmemory database.
@@ -42,8 +43,9 @@ public class GLSearch{
     GLRequester req;
     SGLRepository ser;
 
-    public GLSearch(String ApiUrl)throws SQLException{
+    public GLSearch(String ApiUrl)throws IOException, SQLException{
 	mapper = new ObjectMapper();
+	mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	req = new GLRequester(ApiUrl);
 	ser = new SGLRepository();
     }
@@ -53,13 +55,16 @@ public class GLSearch{
      */
     public int attachSearchResults(String searchTerm)throws IOException, SQLException, JsonParseException, JsonMappingException{
 	
-	try(Response res=req.foundProjects(searchTerm)){
-		ArrayList<GLProject> projects = mapper.readValue(res.body().charStream(), ArrayList.class);
+	//Replace spaces in the search term with + 
+	String HttpSearchTerm = searchTerm.replace(' ', '+');
+
+	try(Response res=req.foundProjects(HttpSearchTerm)){
+		GLProject projects[] = mapper.readValue(res.body().charStream(), GLProject[].class);
 		for(GLProject p:projects){
 		    p.getLanguagesApi(mapper, req);
 		    ser.serialize(p); 
 		}
-		return projects.size();
+		return projects.length;
 	    }catch(Exception e){
 	    throw e;
 	}	

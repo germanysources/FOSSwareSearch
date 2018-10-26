@@ -25,6 +25,7 @@ package org.RepositorySearch.serialize;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Types;
 
 import org.RepositorySearch.GLProject;
 import org.RepositorySearch.CreateDBScheme;
@@ -62,9 +63,20 @@ public class SGLRepository{
 	    InsertRepo.setString(4, repo.getMainLanguage());
 	    InsertRepo.setInt(5, repo.star_count);
 	    InsertRepo.setInt(6, repo.forks_count);
-	    InsertRepo.setDate(7, repo.getUpdatedAt());
-	    InsertRepo.setDate(8, repo.getCreatedAt());
+	    try{
+		InsertRepo.setDate(7, repo.getUpdatedAt());
+	    }catch(NullPointerException e){
+		InsertRepo.setNull(7, Types.DATE);
+	    }
+	    try{
+		InsertRepo.setDate(8, repo.getCreatedAt());
+	    }catch(NullPointerException e){
+		InsertRepo.setNull(8, Types.DATE);
+	    }
 	    InsertRepo.setInt(9, repo.score);
+
+	    InsertRepo.execute();
+
 	}catch(SQLException e){
 	    //close the statements and open them again, otherwise SQLException would throw
 	    //in the next run

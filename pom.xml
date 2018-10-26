@@ -25,14 +25,9 @@
         <artifactId>maven-surefire-plugin</artifactId>
 	<version>2.22.1</version>
         <configuration>
-	  <!-- <systemPropertyVariables>
-	    <java.library.path>.</java.library.path>
-	  </systemPropertyVariables>  -->
-	  <configuration>
-	    <forkMode>once</forkMode>
-            <argLine>-Djava.library.path=.</argLine>
-          </configuration>
           <rerunFailingTestsCount>2</rerunFailingTestsCount>
+	  <forkMode>once</forkMode>
+          <argLine>-Djava.library.path=.</argLine>
         </configuration>
       </plugin>
     </plugins>

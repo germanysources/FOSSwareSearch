@@ -38,8 +38,10 @@ public enum Msg {
     ERROR("[ERROR] "),
     foundResults("Found {0} repositories. Filter or order them with your sql statement."),
     resultEmpty("No results found"),
-    help("Searchs with apis through open source software provider (github, gitlab).\n Usage:\n python runMain.py [Options] search term \n In the search term you can use spaces.\n You cannot use -h or -na here, because this is interpreted as an option.\n Options:\n -h print this help\n -na In the configuration file you can add your favorite search extensions\n (for example language:java if you only want to search for java repositories.\n With this option this search extensions is disabled.\n "),
-    noSearchTerm("The search term is missing.")
+    help("Searchs with apis through open source software provider (github, gitlab).\n Usage:\n python runMain.py [Options] search term \n In the search term you can use spaces.\n You cannot use -h or -na here, because this is interpreted as an option.\n Options:\n -h print this help\n -na In the configuration file you can add your favorite search extensions\n (for example language:java if you only want to search for java repositories.\n With this option this search extensions is disabled.\n -t GitLab Personal Access Token.\n Project Homepage https://github.com/germanysources/FOSSwareSearch"),
+    noSearchTerm("The search term is missing."),
+    support("If you need help, consider to open an issue on https://github.com/germanysources/FOSSwareSearch/issues"),
+    NoGitLabToken("For searching through gitlab you need a personal access token.\n Supplie it either with the option -t or write it into the config file.")
     ;
     
     private static boolean checkEnabled = true;

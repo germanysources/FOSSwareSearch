@@ -40,7 +40,9 @@ public class queryConsole{
     GHSearchResults ghres;
     GLSearch glres;
     TerminalConnection tconnect;
-    
+    static String searchTerm;
+    static boolean addFavorite;
+
     static{
 	System.loadLibrary("ConsoleWidth");
     }
@@ -54,16 +56,22 @@ public class queryConsole{
 	RSLogger.getInstance();
 	Msg.loadFromDisk();	
 	try{
-	    String searchTerm = null;
+	    searchTerm = null;
 	    queryConsole qu = new queryConsole();
-	    boolean addFavorite = false;
+	    addFavorite = true;
+	    boolean isToken = false;
 	//concatenate the search term
 	    for(String term:args){
 		if(term.equals("-na")){
-		    addFavorite = true;
+		    addFavorite = false;
 		}else if(term.equals("-h")){
 		    System.out.println(Msg.help.get());
 		    return;
+		}else if(term.equals("-t")){
+		    isToken = true;
+		}else if(isToken){
+		    Config.getInstance().GitLabToken = term;
+		    isToken = false;
 		}else{
 		    //no option it's part of the search term
 		    if(searchTerm != null)
@@ -81,6 +89,7 @@ public class queryConsole{
 	}catch(Exception e){
 	    RSLogger.LogException(e);
 	    System.out.println(Msg.ERROR.get()+e.getMessage());
+	    System.out.println(Msg.support.get());
 	}
 	
     }
@@ -138,6 +147,12 @@ public class queryConsole{
 	    ret = fetchMoreGitHub(command);
 	    if(ret)
 		return;
+	    ret = fetchFromGitlab(command);
+	    if(ret)
+		return;
+	    ret = NewSearch(command);
+	    if(ret)
+		return;
 	    ret = con.DisplayResultsAsblock(command);
 	    if(ret)
 		return;
@@ -145,6 +160,7 @@ public class queryConsole{
 	}catch(IllegalArgumentException e){
 	    System.out.println(Msg.ERROR.get() + e.getMessage());
 	}catch(SQLException e){
+	    RSLogger.LogException(e);
 	    System.out.println(Msg.ERROR.get() + e.getMessage());
 	}catch(IOException e){
 	    RSLogger.LogException(e);
@@ -154,6 +170,22 @@ public class queryConsole{
     }   
 
     private void SearchRepos(String term, boolean AddMyFavorites)throws IOException, SQLException{
+
+	_searchRepos(term, AddMyFavorites);
+
+	Readline readline = ReadlineBuilder.builder().enableHistory(true).build();
+	Console con = new Console();
+	//run initial query
+	String command = Config.getInstance().InitialSQLQuery;
+	if(command != null){
+	    ExecuteSQLCommand(con, command, true);
+	}
+	read(readline, con, true);
+	tconnect.openBlocking();
+
+    }
+    
+    private void _searchRepos(String term, boolean AddMyFavorites)throws IOException, SQLException{
 
 	int found = 0;
 	
@@ -172,11 +204,6 @@ public class queryConsole{
 	    }
 	}
 	System.out.println(Msg.foundResults.format(found));
-	Readline readline = ReadlineBuilder.builder().enableHistory(true).build();
-	Console con = new Console();	
-	read(readline, con, true);
-	tconnect.openBlocking();
-
     }
 
     /**
@@ -217,6 +244,57 @@ public class queryConsole{
 	scan.findInLine("fetch (\\d+) rows from github");
 	return scan.match();
 	
+    }
+    
+    /**
+     * fetches the search result from gitlab
+     * @param command "fetch rows from gitlab" means search through gitlab
+     * @returns true if the command for fetching from gitlab occurs
+     */
+    private boolean fetchFromGitlab(String command)throws IOException, SQLException{
+	
+	if(command != null && command.equals("fetch rows from gitlab")){
+	    int found = glres.attachSearchResults(searchTerm);
+	    System.out.println(Msg.foundResults.format(found));	    
+	    return true;
+	}
+	return false;
+
+    }
+    
+    
+
+    /**
+     * Delete all entries in the inmemory database and execute a new search
+     * @param command "new search [searchTerm]" start a new search
+     * @returns true if we want to start a new search query
+     */
+    private boolean NewSearch(String command)throws IOException, SQLException{
+	
+	boolean start = StartNewSearch(command);
+	if(start){
+	    CreateDBScheme.clearAllTables();
+	    _searchRepos(searchTerm, addFavorite);
+	}
+	return start;
+
+    }
+
+    boolean StartNewSearch(String command){
+	
+	//expected prefix for a new search
+	final String prefix = "new search";
+	if(command == null){
+	    return false;
+	}
+	if(command.startsWith(prefix)){
+	    try{
+		searchTerm = command.subSequence(prefix.length()+1, command.length()).toString();
+		return true;
+	    }catch(IndexOutOfBoundsException e){}
+	}
+	return false;
+
     }
 
 }

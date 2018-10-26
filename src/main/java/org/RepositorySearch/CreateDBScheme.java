@@ -61,4 +61,18 @@ public class CreateDBScheme{
 
     }
 
+    /**
+     * Clears the results from all database tables
+     */
+    public synchronized static void clearAllTables()throws SQLException{
+	
+	Connection con = getConnection();	
+	Statement stmt = con.createStatement();
+	
+	stmt.executeUpdate("delete from Repositories");
+	stmt.executeUpdate("delete from RepositoryTopics");
+
+	stmt.close();
+    }
+
 }

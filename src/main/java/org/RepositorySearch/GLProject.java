@@ -36,20 +36,22 @@ import org.kohsuke.github.GitHub;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GLProject{
 
     private static final String[] TIME_FORMATS = {"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"};
-
+    
+    //public String name, name_with_namespace, path, path_with_namespace, default_branch, ssh_url_to_repo, avatar_url;
     public String http_url_to_repo,
 	description,
 	web_url;
     public int star_count, forks_count, score;
-    String created_at, last_activity_at;
+    public String created_at, last_activity_at;
     public int id;
     
     HashMap languages;       
-        
+    
     /**
      * Request the languages with an api call
      */
@@ -72,9 +74,9 @@ public class GLProject{
 
 	Set<String> langs = languages.keySet();
 	for(String l:langs){
-	    if((float)languages.get(l) > maxCodePer){
+	    if(((Double)languages.get(l)).floatValue() > maxCodePer){
 		mlang = l;
-		maxCodePer = (float)languages.get(l); 
+		maxCodePer = ((Double)languages.get(l)).floatValue(); 
 	    }
 	}
 	return mlang;

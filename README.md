@@ -2,9 +2,6 @@
 <img
 src="https://raw.githubusercontent.com/germanysources/FOSSwareSearch/master/docs/logo.png" alt="logo">
 
-## Current Status ##
-* experimental
-* feature not fully implemented
 ## Idea ##
 This application should help us to find open source projects and software repositories.
 It should use the search api of the hosting provider, if such a api
@@ -18,11 +15,13 @@ we can apply a granular filter with a sql query and we don't have to build a com
 
 ## Definitions ##
 * The service www.github.com is called just github
+* The service www.gitlab.com is called just gitlab
 * Query without the prefix sql stands for the search term, we send to the hosting provider like github or gitlab.
 
 ## Hosting provider ##
-The search api from github is included. The search api from gitlab is planned
-to include.
+The search api from github and from gitlab are included. 
+For github we don't need an authorization token. For gitlab we need a personal
+access token, which we create in your user profile.
 
 ## User interface ##
 A user interface for the bash(shell) is included. Before open the program we supplie
@@ -69,13 +68,14 @@ this repository.
 After the executing the sql query, we can type the next sql query or the command ```exit``` to quit the application.
 
 ## SQL Syntax ##
-The complete syntax of sqlite is supported.
+The complete syntax of [sqlite](www.sqlite.org) is supported.
 
 For output there is the non-sql extension ```view block```. It displays each
 repository as a block. If we omit ```view block```, we can see the
 repositories in a tabular view.
 
-A non-sql query is included for fetching more results from github:
+### Non SQL statements ###
+For fetching more results from github:
 ```
 fetch X rows from github
 ```
@@ -83,6 +83,21 @@ It means, we want to attach X (an integer value) search results to the
 database. Not all search results are put immediately into the database. For
 example only the first 20 results are put into the database. If we need more
 results, we can type this command.
+
+For fetching results from gitlab:
+```
+fetch rows from gitlab
+```
+The gitlab search api loads all results with one api call. We can't split the
+results into smaller packages.
+
+For changing the search query(which is send to github or gitlab):
+```
+new search [query]
+```
+[query] should be replaced by your query. Now the inmemory database is
+refreshed with results of this new query.
+
 
 ### Quit ###
 Exit the application with ```exit``` command.
@@ -112,7 +127,7 @@ fields:
 The configuration is saved in the file config.json (as can be seen in the javascript object notation).
 Here we can control the following parameters.
 
-For searching with github:
+### For searching with github: ###
 * **maxNoResults**: The numbers of results, that are put into database after
 executing the search query. If more results are available, we can fetch them
 extra. This is also the number of results, which are fetched from one api
@@ -124,8 +139,16 @@ available. It's recommended to choose a little number like 10 or 20.
  programms). [At](https://help.github.com/articles/searching-for-repositories/)
  we can take a look at the syntax for this parameter.
 
+### For searching with gitlab: ###
+* **GitLabToken**: The personal access token. If we don't want to hard code it
+into the config file, we can supplie it with the ```-t``` option while
+starting the application.
+
+### For all hosting providers: ###
 * **HostingProvider**: An array, which hosting providers are used. Each hosting
     provider has a unique key (1 stands for github.com, 2 stands for gitlab.com).
+* **InitialSQLQuery**: The sql query, which is executed after we received the
+results from the hosting providers.
 
 ## Build ##
 ### Dependencies ###

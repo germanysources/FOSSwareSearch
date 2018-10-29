@@ -37,13 +37,15 @@ import org.RepositorySearch.serialize.SGHRepository;
  * Serialize the search results from github into the inmemory database
  */
 public class GHSearchResults{
-    GitHub account;
-    SGHRepository serializer; 
-    PagedIterator it;
+    protected GitHub account;
+    protected SGHRepository serializer; 
+    protected PagedIterator it;
+    protected Config conf;
 
-    public GHSearchResults(GitHub account)throws SQLException{
+    public GHSearchResults(GitHub account)throws IOException, SQLException{
 	this.account = account;
 	serializer = new SGHRepository(account);
+	conf = Config.getInstance();
     }
 
     /**
@@ -56,14 +58,14 @@ public class GHSearchResults{
     public int query(String term, boolean AddMyFavorites)throws IOException, SQLException{
 	
 	String sterm;
-	if(AddMyFavorites && Config.getInstance().FavoriteAdditions != null)
-	    sterm = term + " " + Config.getInstance().FavoriteAdditions;
+	if(AddMyFavorites && conf.FavoriteAdditions != null)
+	    sterm = term + " " + conf.FavoriteAdditions;
 	else
 	    sterm = term;
 	
 	PagedSearchIterable sit = account.searchRepositories().q(sterm).list();
-	it = sit._iterator(Config.getInstance().maxNoResults);
-	return fetch(Config.getInstance().maxNoResults);
+	it = sit._iterator(conf.maxNoResults);
+	return fetch(conf.maxNoResults);
 
     }
     

@@ -50,4 +50,12 @@ public class TestConsole{
 
     }
 
+    @Test
+    public void ShowLongString()throws Exception{
+	
+	Console con = new Console();
+	con.ShowLongString(4, "firs;sec;jj");
+
+    }
+
 }

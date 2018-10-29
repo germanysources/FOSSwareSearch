@@ -15,6 +15,22 @@ extern "C" {
 JNIEXPORT void JNICALL Java_org_RepositorySearch_Console_PrintDelimiter
   (JNIEnv *, jobject);
 
+/*
+ * Class:     org_RepositorySearch_Console
+ * Method:    ShellColor
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_RepositorySearch_Console_ShellColor
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_RepositorySearch_Console
+ * Method:    getSize
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_org_RepositorySearch_Console_getSize
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif

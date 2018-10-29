@@ -24,6 +24,7 @@ or equipment, and unavailability or interruption of operations.
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <stdio.h>
+#include <jni.h>
 #include "Console.h"
 
 //prints one line the split the repositories. Only implemented for unix systems.
@@ -36,5 +37,18 @@ JNIEXPORT void JNICALL Java_org_RepositorySearch_Console_PrintDelimiter(JNIEnv *
     printf("-");
   }
   printf("\n");
+
+}
+
+JNIEXPORT jint JNICALL Java_org_RepositorySearch_Console_getSize
+(JNIEnv *env, jobject this){
+  return (jint)(-1);
+}
+
+JNIEXPORT jboolean JNICALL Java_org_RepositorySearch_Console_ShellColor
+(JNIEnv *env, jobject this){
+
+  //is always bash shell
+  return JNI_TRUE;
 
 }

@@ -34,7 +34,10 @@ javah = join(os.environ['JAVA_HOME'], 'bin', 'javah')
 classpath=join('target', 'classes')
 
 HeaderFile=join('src', 'main', 'nativeC', 'Console.h')
-ImplFile=join('src', 'main', 'nativeC', 'Console.c')
+if is_windows:
+    ImplFile=join('src', 'main', 'nativeC', 'ConsoleWin.c')
+else:
+    ImplFile=join('src', 'main', 'nativeC', 'Console.c')
 
 include = []
 #collect library headers
@@ -46,12 +49,16 @@ include.append('-I\"'+join(os.environ['JAVA_HOME'], 'include')+'\"')
 execute([javah, '-classpath', classpath, '-o', HeaderFile, 'org.RepositorySearch.Console'])
 
 output = ''
+gcc_command = ''
 if is_windows:
     output = 'ConsoleWidth.dll'
+    gcc_command = 'gcc -Wl,--add-stdcall-alias'
 else:
     output = 'libConsoleWidth.so'
+    gcc_command = 'gcc -std=c99 -fPIC'
 
-execute(["gcc -std=c99 -fPIC",  ' '.join(include),
+execute([gcc_command,  
+         ' '.join(include),
          "-shared -o",
          output,
          ImplFile

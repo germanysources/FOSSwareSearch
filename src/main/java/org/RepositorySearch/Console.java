@@ -46,7 +46,11 @@ public class Console extends GUIBase{
 
     int colWidth[];
 
-    private native void PrintDelimiter();    
+    private native void PrintDelimiter();
+    /** @returns true if bash shell color escape codes are supported */
+    private native boolean ShellColor();
+    /** get the terminal size. If not know, returns -1 */
+    private native int getSize();
 
     @Override
     protected void DisplayRepoHeader(String html_url, String description){
@@ -54,16 +58,39 @@ public class Console extends GUIBase{
 	System.out.println();
 	System.out.println(html_url);
 	System.out.println();
-	System.out.println(description);
+	int csize = getSize();
+	if(csize == -1){
+	    //shell can display endles strings
+	    System.out.println(description);
+	}else{
+	    //Split the string at end of the line
+	    ShowLongString(csize, description);
+	}
 	
 	properties = new ArrayList<String[]>();
 	colWidth = new int[2];
     }
+    
+    //show long string, line break after size no. of chars
+    void ShowLongString(int size, String st){
+	int off = 0;
+	while(off<st.length()){
+	    int noff = off+size;
+	    if(noff>st.length())
+		noff=st.length();
+	    System.out.println(st.substring(off, noff));
+	    off = noff;
+	}
+    }
 
     @Override
     protected void DisplayTopic(String name){	
-	//with bash shell color style
-	System.out.print(CONSTANT.BashColorBlue+"["+name+"] "+CONSTANT.BashColorEnd);	
+	if(ShellColor()){
+	    //with bash shell color style	
+	    System.out.print(CONSTANT.BashColorBlue+"["+name+"] "+CONSTANT.BashColorEnd);	
+	}else{
+	    System.out.print("["+name+"]");
+	}
     }
 
     //Display the properties in rows

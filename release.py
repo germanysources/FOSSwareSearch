@@ -33,15 +33,7 @@ def execute(cmd_parts):
     print(' '.join(cmd_parts))
     os.system(' '.join(cmd_parts))
 
-is_windows = 'windows' in platform.system().lower()
-
-output = ''
-if is_windows:
-    output = 'ConsoleWidth.dll'
-else:
-    output = 'libConsoleWidth.so'
-
 execute(['tar -jcf', sys.argv[1], join('target', 'FOSSwareSearch-1.0.0.jar' ), 
-         join('target/dependency'), output, 'runMain.py',
+         join('target/dependency'), 'ConsoleWidth.dll', 'libConsoleWidth.so', 'runMain.py',
          'lang', 'config.json', 'log.properties'
 ])

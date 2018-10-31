@@ -47,7 +47,7 @@ JNIEXPORT jint JNICALL Java_org_RepositorySearch_Console_getSize
 
 int GetSize(){
   
-  int size=50;
+  int size=-1;
   int fd=fileno(stdout);
   DWORD nhandle;
   HANDLE handle;
@@ -65,11 +65,13 @@ int GetSize(){
 
   if(size != -1){
     //standard windows cmd is used, no bash shell
-    isBash = JNI_FALSE;
     handle = GetStdHandle(nhandle);  
   
     if(GetConsoleScreenBufferInfo(handle, &csbi)){
+      isBash = JNI_FALSE;
       size = csbi.srWindow.Right-csbi.srWindow.Left;
+    }else{
+      isBash = JNI_TRUE;
     }
 
   }else{

@@ -4,14 +4,16 @@ src="https://raw.githubusercontent.com/germanysources/FOSSwareSearch/master/docs
 
 ## Idea ##
 This application should help us to find open source projects and software repositories.
+It is constructed for people how like the command line more than a complex UI.
+Instead of a algorithm choosing the best match for us, 
+we can decide actively which is the best match for our search.
+For this purpose the search results are put in an [sqlite](https://sqlite.org/features.html) inmemory database.
+This inmemory database gives us all the features of a RDBMS without a complex setup process.
+
+## Design Approach ##
 It should use the search api of the hosting provider, if such a api
 exists. It should handle different hosting providers.
 The search scope are projects, not issues or questions.
-
-The search results are put into a inmemory database and the user can filter or
-sort them with sql queries.
-The inmemory database has a big advantage. When a query doesn't return exactly what we needed,
-we can apply a granular filter with a sql query and we don't have to build a complex ui.
 
 ## Definitions ##
 * The service www.github.com is called just github

@@ -1,6 +1,5 @@
 '''
-Build the release as zip archiv.
-usage: argv[1] the zip archive file.
+run the release package
 
 Eclipse Public License - v 2.0
 Copyright (c) 2018 Johannes Gerbershagen <johannes.gerbershagen@kabelmail.de>
@@ -24,17 +23,38 @@ compliance with applicable laws, damage to or loss of data, programs
 or equipment, and unavailability or interruption of operations.
 
 '''
-
-import os, platform
-from os.path import join
+import os, shutil, platform 
+from os.path import exists, join, isfile, isdir
 import sys
 
+is_windows = 'windows' in platform.system().lower()
+classpath_sep = ';' if is_windows else ':'
+javaclass = "org.RepositorySearch.queryConsole"
+
 def execute(cmd_parts):
-    print(' '.join(cmd_parts))
     os.system(' '.join(cmd_parts))
 
-execute(['zip', sys.argv[1], join('target', 'FOSSwareSearch-1.0.0.jar' ), 
-         join('target', 'github-api-1.96.prerelease.jar'), 'ConsoleWidth.dll', 'libConsoleWidth.so', 'fosss.py', 'README.md', 
-         'install_fosswareSearch.xml', 'Install.py',
-         join('lang', 'Resource_de.properties'), 'config.json', 'log.properties'
+# Recursively collect library jars
+jars = []
+if os.access(join('target', 'FOSSwareSearch-1.1.0.jar'), os.F_OK):
+    jars.append(join('target', 'FOSSwareSearch-1.1.0.jar'))
+else:
+    jars.append(join('target', 'classes'))
+
+for root, dirs, files in os.walk('target'):
+    for filename in files:
+        jars.append(join(root, filename))
+
+searchTerm = "";
+for i in range(len(sys.argv)):
+    if i > 0:
+        searchTerm = searchTerm + " " + sys.argv[i]
+
+execute([
+    'java -cp \"%s\"' % classpath_sep.join(jars),
+    '-Djava.library.path=.',
+    '-Djava.util.logging.config.file=log.properties',
+    javaclass,
+    searchTerm,
 ])
+

@@ -25,11 +25,27 @@ The search api from github and from gitlab are included.
 For github we don't need an authorization token. For gitlab we need a personal
 access token, which we create in your user profile.
 
+## Installation ##
+The releases can be found at this repository. Since version 1.1.0 the zip
+archive FOSSwareSearch-{v}.zip is contained in the release package.
+The zip archive doesn't contain the dependencies, instead of they are downloaded
+from the [central maven repository](https://mvnrepository.com). For installation
+[maven](maven.apache.org) is needed.
+
+### Installation steps: ###
+* extract the contents from the zip file in a new directory
+* run ```python Install.py``` (downloads the dependencies)
+* now you can run the application ```python fosss.py [searchTerm]```
+
+There are 2 python scripts for running the application. ```runMain.py``` is
+only included in the source package. It is supposed to run the application after
+compiling it. ```fosss.py``` is supposed to run the released application.
+
 ## User interface ##
-A user interface for the bash(shell) is included. Before open the program we supplie
+A command line interface is included. Before open the program we supplie
 the search term (for example we want to know where the source code of a repository called curl is):
 ```
-python runMain.py curl in:name
+python fosss.py curl in:name
 ```
 The output will be:
 ```

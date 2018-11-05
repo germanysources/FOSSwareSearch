@@ -204,7 +204,7 @@ features can be changed without any notice. So we don't have a forerun to change
 application, if the preview features are changing.
 
 ## System/Library requirements ##
-The application was tested on jre 8 with the bash shell. The windows shell isn't fully supported in this version.
+The application was tested on jre 8. The binaries are compiled for jre 8.
 
 ## Contributing ##
 Contributions are welcome. If you know an open source hosting provider, which
@@ -212,7 +212,8 @@ can be included in this application, you are welcome the integrate this
 provider in the application.
 For further information see [CONTRIBUTING.md](https://github.com/germanysources/FOSSwareSearch/blob/master/CONTRIBUTING.md).
 
-## Need help? ##
+## Need help or have feedback? ##
 * Open an issue in the
-[tracker](https://github.com/germanysources/FOSSwareSearch/issues)
+[issue tracker](https://github.com/germanysources/FOSSwareSearch/issues) for this repository
+* Ask a question on [stackoverflow](https://stackoverflow.com/questions/tagged/github-api-v3) tag github-api-v3
 

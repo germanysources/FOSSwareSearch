@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Types;
 
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTopics;
@@ -87,6 +88,8 @@ public class SGHRepository{
 		InsertRepo.setString(3, repo.getLicenseKey().getName());
 	    }catch(NullPointerException e){
 		//if license is unknown
+		InsertRepo.setNull(2, Types.VARCHAR);
+		InsertRepo.setNull(3, Types.VARCHAR);
 	    }
 	    InsertRepo.setString(4, repo.getDescription());
 	    InsertRepo.setString(5, repo.getLanguage());

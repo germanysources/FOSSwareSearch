@@ -24,7 +24,7 @@ package org.RepositorySearch;
 
 public class CONSTANT{
 
-    public static final String Version="1.0.0";
+    public static final String Version="1.1.1";
     //the hosting provider
     public static final int TypeGitHub = 1, TypeGitLab = 2;	
     

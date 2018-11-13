@@ -1,4 +1,4 @@
-/*
+''' Install the dependencies with maven
 Eclipse Public License - v 2.0
 Copyright (c) 2018 Johannes Gerbershagen <johannes.gerbershagen@kabelmail.de>
 
@@ -19,17 +19,16 @@ risks associated with its exercise of rights under this Agreement,
 including but not limited to the risks and costs of program errors,
 compliance with applicable laws, damage to or loss of data, programs
 or equipment, and unavailability or interruption of operations.
-*/
-package org.RepositorySearch;
 
-public class CONSTANT{
+'''
+import os
 
-    public static final String Version="1.1.1";
-    //the hosting provider
-    public static final int TypeGitHub = 1, TypeGitLab = 2;	
-    
-    //the bash shell color styles
-    public static final String BashColorBlue = "\033[34m",
-	BashColorEnd = "\033[m";
+def execute(cmd_parts):
+    print(' '.join(cmd_parts))
+    os.system(' '.join(cmd_parts))
 
-}
+#install groupId org.kohsuke artifact github-api manualy, because
+# missing at central maven repository.
+#The file github-api-1.96.prerelease.jar FOSSwareSearch-1.1.0.jar must be present in the release directory 
+#copy the dependencies
+execute(['mvn dependency:copy-dependencies -DincludeScope=runtime -f install_fosswareSearch.xml'])

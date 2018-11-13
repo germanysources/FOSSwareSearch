@@ -4,14 +4,16 @@ src="https://raw.githubusercontent.com/germanysources/FOSSwareSearch/master/docs
 
 ## Idea ##
 This application should help us to find open source projects and software repositories.
+It is constructed for people how like the command line more than a complex UI.
+Instead of a algorithm choosing the best match for us, 
+we can decide actively which is the best match for our search.
+For this purpose the search results are put in an [sqlite](https://sqlite.org/features.html) inmemory database.
+This inmemory database gives us all the features of a RDBMS without a complex setup process.
+
+## Design Approach ##
 It should use the search api of the hosting provider, if such a api
 exists. It should handle different hosting providers.
 The search scope are projects, not issues or questions.
-
-The search results are put into a inmemory database and the user can filter or
-sort them with sql queries.
-The inmemory database has a big advantage. When a query doesn't return exactly what we needed,
-we can apply a granular filter with a sql query and we don't have to build a complex ui.
 
 ## Definitions ##
 * The service www.github.com is called just github
@@ -23,11 +25,27 @@ The search api from github and from gitlab are included.
 For github we don't need an authorization token. For gitlab we need a personal
 access token, which we create in your user profile.
 
+## Installation ##
+The releases can be found at this repository. Since version 1.1.0 the zip
+archive FOSSwareSearch-{v}.zip is contained in the release package.
+The zip archive doesn't contain the dependencies, instead of they are downloaded
+from the [central maven repository](https://mvnrepository.com). For installation
+[maven](maven.apache.org) is needed.
+
+### Installation steps: ###
+* extract the contents from the zip file in a new directory
+* run ```python Install.py``` (downloads the dependencies)
+* now you can run the application ```python fosss.py [searchTerm]```
+
+There are 2 python scripts for running the application. ```runMain.py``` is
+only included in the source package. It is supposed to run the application after
+compiling it. ```fosss.py``` is supposed to run the released application.
+
 ## User interface ##
-A user interface for the bash(shell) is included. Before open the program we supplie
+A command line interface is included. Before open the program we supplie
 the search term (for example we want to know where the source code of a repository called curl is):
 ```
-python runMain.py curl in:name
+python fosss.py curl in:name
 ```
 The output will be:
 ```
@@ -186,7 +204,7 @@ features can be changed without any notice. So we don't have a forerun to change
 application, if the preview features are changing.
 
 ## System/Library requirements ##
-The application was tested on jre 8 with the bash shell. The windows shell isn't fully supported in this version.
+The application was tested on jre 8. The binaries are compiled for jre 8.
 
 ## Contributing ##
 Contributions are welcome. If you know an open source hosting provider, which
@@ -194,7 +212,8 @@ can be included in this application, you are welcome the integrate this
 provider in the application.
 For further information see [CONTRIBUTING.md](https://github.com/germanysources/FOSSwareSearch/blob/master/CONTRIBUTING.md).
 
-## Need help? ##
+## Need help or have feedback? ##
 * Open an issue in the
-[tracker](https://github.com/germanysources/FOSSwareSearch/issues)
+[issue tracker](https://github.com/germanysources/FOSSwareSearch/issues) for this repository
+* Ask a question on [stackoverflow](https://stackoverflow.com/questions/tagged/github-api-v3) tag github-api-v3
 

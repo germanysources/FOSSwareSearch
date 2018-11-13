@@ -89,7 +89,7 @@ public class Console extends GUIBase{
 	    //with bash shell color style	
 	    System.out.print(CONSTANT.BashColorBlue+"["+name+"] "+CONSTANT.BashColorEnd);	
 	}else{
-	    System.out.print("["+name+"]");
+	    System.out.print("["+name+"] ");
 	}
     }
 

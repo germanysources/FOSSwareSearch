@@ -1,4 +1,6 @@
-/*
+'''
+run the release package
+
 Eclipse Public License - v 2.0
 Copyright (c) 2018 Johannes Gerbershagen <johannes.gerbershagen@kabelmail.de>
 
@@ -19,17 +21,40 @@ risks associated with its exercise of rights under this Agreement,
 including but not limited to the risks and costs of program errors,
 compliance with applicable laws, damage to or loss of data, programs
 or equipment, and unavailability or interruption of operations.
-*/
-package org.RepositorySearch;
 
-public class CONSTANT{
+'''
+import os, shutil, platform 
+from os.path import exists, join, isfile, isdir
+import sys
 
-    public static final String Version="1.1.1";
-    //the hosting provider
-    public static final int TypeGitHub = 1, TypeGitLab = 2;	
-    
-    //the bash shell color styles
-    public static final String BashColorBlue = "\033[34m",
-	BashColorEnd = "\033[m";
+is_windows = 'windows' in platform.system().lower()
+classpath_sep = ';' if is_windows else ':'
+javaclass = "org.RepositorySearch.queryConsole"
 
-}
+def execute(cmd_parts):
+    os.system(' '.join(cmd_parts))
+
+# Recursively collect library jars
+jars = []
+if os.access(join('target', 'FOSSwareSearch-1.1.0.jar'), os.F_OK):
+    jars.append(join('target', 'FOSSwareSearch-1.1.0.jar'))
+else:
+    jars.append(join('target', 'classes'))
+
+for root, dirs, files in os.walk('target'):
+    for filename in files:
+        jars.append(join(root, filename))
+
+searchTerm = "";
+for i in range(len(sys.argv)):
+    if i > 0:
+        searchTerm = searchTerm + " " + sys.argv[i]
+
+execute([
+    'java -cp \"%s\"' % classpath_sep.join(jars),
+    '-Djava.library.path=.',
+    '-Djava.util.logging.config.file=log.properties',
+    javaclass,
+    searchTerm,
+])
+

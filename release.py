@@ -34,7 +34,6 @@ def execute(cmd_parts):
     print(' '.join(cmd_parts))
     os.system(' '.join(cmd_parts))
 
-<<<<<<< HEAD
 execute(['tar -jcf', sys.argv[1], join('target', 'FOSSwareSearch-1.0.0.jar' ), 
          join('target/dependency'), 'ConsoleWidth.dll', 'libConsoleWidth.so', 'runMain.py',
          'lang', 'config.json', 'log.properties'
@@ -43,5 +42,4 @@ execute(['zip', sys.argv[1], join('target', 'FOSSwareSearch-'+sys.argv[2]+'.jar'
          join('target', 'github-api-1.96.prerelease.jar'), 'ConsoleWidth.dll', 'libConsoleWidth.so', 'fosss.py', 'README.md', 
          'install_fosswareSearch.xml', 'Install.py',
          join('lang', 'Resource_de.properties'), 'config.json', 'log.properties'
->>>>>>> master
 ])

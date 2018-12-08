@@ -40,10 +40,11 @@ public abstract class GUIBase{
     
     public static final String ViewBlock = "view block";
     
-    private PreparedStatement readTopics;
+    private PreparedStatement readTopics, readContent;
     
     public GUIBase()throws SQLException{
 	readTopics = CreateDBScheme.getConnection().prepareStatement("select topic from RepositoryTopics where html_url = ?");
+	readContent = CreateDBScheme.getConnection().prepareStatement("select path, content_url from RepositoryContent where html_url = ?");
     }
 
     /**
@@ -86,7 +87,11 @@ public abstract class GUIBase{
 		
 		DisplayRepoHeader(rs.getString("html_url"), rs.getString("description"));
 		getTopics(rs.getString("html_url"));
-		
+		try{
+		    getContentPaths(rs.getString("html_url"));
+		}catch(SQLException e){
+		    RSLogger.LogException(e);
+		}
 		for(int j=1;j<=columns.getColumnCount();j++){
 		    if(!columns.getColumnLabel(j).equals("html_url") 
 		       && !columns.getColumnLabel(j).equals("description")){
@@ -152,6 +157,19 @@ public abstract class GUIBase{
 	}
 
     }
+
+    //print the paths if the repository was found because of searching through content
+    private void getContentPaths(String html_url)throws SQLException{
+	
+	readContent.setString(1, html_url);
+	ResultSet rs = readContent.executeQuery();
+	if(!rs.isAfterLast())
+	    DisplayContentHeader();
+	while(rs.next()){
+	    DisplayContentPath(rs.getString(1), rs.getString(2));
+	}
+
+    }
         
     protected abstract void DisplayRepoHeader(String html_url, String description);
 
@@ -174,5 +192,9 @@ public abstract class GUIBase{
     protected abstract void EndTableRow();
 
     protected abstract void EndTable();
+
+    protected abstract void DisplayContentHeader();
+
+    protected abstract void DisplayContentPath(String path, String url);
 
 }

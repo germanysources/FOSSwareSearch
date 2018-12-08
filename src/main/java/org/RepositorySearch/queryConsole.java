@@ -22,6 +22,7 @@ or equipment, and unavailability or interruption of operations.
 */
 package org.RepositorySearch;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.MatchResult;
 import java.io.IOException;
@@ -55,9 +56,9 @@ public class queryConsole{
 
 	RSLogger.getInstance();
 	Msg.loadFromDisk();	
+	ArrayList<Integer> scope = new ArrayList<Integer>();
 	try{
 	    searchTerm = null;
-	    queryConsole qu = new queryConsole();
 	    addFavorite = true;
 	    boolean isToken = false;
 	//concatenate the search term
@@ -72,6 +73,10 @@ public class queryConsole{
 		}else if(isToken){
 		    Config.getInstance().GitLabToken = term;
 		    isToken = false;
+		}else if(term.equals("-c")){
+		    scope.add(new Integer(CONSTANT.ScopeContent));
+		}else if(term.equals("-hd")){
+		    scope.add(new Integer(CONSTANT.ScopeRepos));		
 		}else{
 		    //no option it's part of the search term
 		    if(searchTerm != null)
@@ -80,6 +85,10 @@ public class queryConsole{
 			searchTerm = term;
 		}
 	    }
+	    //no scope given in the input params: use header data as default
+	    if(scope.size() == 0)
+		scope.add(new Integer(CONSTANT.ScopeRepos));		
+	    queryConsole qu = new queryConsole(scope);
 	
 	    if(searchTerm == null){
 		System.out.println(Msg.ERROR.get()+Msg.noSearchTerm.get());
@@ -97,10 +106,10 @@ public class queryConsole{
     /**
      * Setup connection to hosting providers
      */
-    public queryConsole()throws SQLException, IOException{
+    public queryConsole(ArrayList<Integer> scope)throws SQLException, IOException{
 	CreateDBScheme.forRepository();
 	ghaccount = GitHub.connectAnonymously();
-	ghres = new GHSearchResults(ghaccount);
+	ghres = new GHSearchResults(ghaccount, scope);
 	glres = new GLSearch("https://gitlab.com/api/v4");
  	tconnect = new TerminalConnection();
     }

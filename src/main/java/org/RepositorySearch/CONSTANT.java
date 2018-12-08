@@ -27,7 +27,9 @@ public class CONSTANT{
     public static final String Version="1.1.1";
     //the hosting provider
     public static final int TypeGitHub = 1, TypeGitLab = 2;	
-    
+    //search scope for github
+    public static final int ScopeRepos = 1, ScopeContent = 2;
+
     //the bash shell color styles
     public static final String BashColorBlue = "\033[34m",
 	BashColorEnd = "\033[m";

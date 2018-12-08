@@ -15,3 +15,8 @@ The integration test is done manually.
   b. fetch X rows from github
   c. fetch rows from gitlab
 * invalid sql command  
+* Search scope
+  a. default header data
+  b. search in header data
+  c. search in content
+  e. search in both

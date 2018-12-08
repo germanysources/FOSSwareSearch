@@ -56,6 +56,10 @@ public class CreateDBScheme{
 
 	stmt.executeUpdate("create table RepositoryTopics(html_url string, topic string, foreign key(html_url) references Repositories(html_url))");
 	stmt.executeUpdate("create unique index turl on RepositoryTopics(html_url, topic)");	
+	
+	//The file path for content to find
+	stmt.executeUpdate("create table RepositoryContent(html_url string, path string, content_url string, foreign key(html_url) references Repositories(html_url))");
+	stmt.executeUpdate("create unique index curl on RepositoryContent(html_url, path)");
 
 	stmt.close();
 

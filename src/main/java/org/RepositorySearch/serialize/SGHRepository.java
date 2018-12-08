@@ -30,6 +30,7 @@ import java.sql.PreparedStatement;
 import java.sql.Types;
 
 import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHTopics;
 import org.kohsuke.github.GitHub;
 
@@ -41,7 +42,7 @@ import org.RepositorySearch.CreateDBScheme;
 public class SGHRepository{
     
     private Connection con;
-    private PreparedStatement InsertRepo, InsertTopic;
+    private PreparedStatement InsertRepo, InsertTopic, InsertContent;
     private GHTopics readerTopics;
 
     /**
@@ -66,16 +67,41 @@ public class SGHRepository{
 
 	InsertRepo = con.prepareStatement("insert into Repositories(html_url, license_key, license_description, description, planguage, homepage, star_count, forks_count, last_activity, created_at, open_issues, score) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ");
 	InsertTopic = con.prepareStatement("insert into RepositoryTopics values(?, ?)");
-	
+	InsertContent = con.prepareStatement("insert into RepositoryContent values(?,?,?)");
+
     }
 
     private void closeStatements()throws SQLException{
 	
 	InsertRepo.close();
 	InsertTopic.close();
+	InsertContent.close();
 
     }
-   
+    
+    /**
+     * Serialize (means execute the the insert statements for this content object)
+     * @throws IOException caused by the github api
+     */
+    public synchronized void serialize(GHContent content)throws SQLException, IOException{
+	
+	try{
+	    serialize(content.getOwner());
+	}catch(SQLException e){	    
+	    //a repository can occur more then one time
+	}
+	InsertContent.setString(1, content.getOwner().getHtmlUrlString());
+	InsertContent.setString(2, content.getPath());
+	InsertContent.setString(3, content.getHtmlUrl());
+	try{
+	    InsertContent.execute();
+	}catch(SQLException e){	    
+	    closeStatements();
+	    prepareStatements();
+	}
+
+    }
+
     /**
      * Serialize (means execute the the insert statements for this repository)
      * @throws IOException caused by the github api
@@ -96,6 +122,7 @@ public class SGHRepository{
 	    InsertRepo.setString(6, repo.getHomepage());
 	    InsertRepo.setInt(7, repo.getStargazersCount());
 	    InsertRepo.setInt(8, repo.getForks());
+	    //@todo NullPointerException when serialize from Content
 	    InsertRepo.setDate(9, new java.sql.Date(repo.getUpdatedAt().getTime()));
 	    InsertRepo.setDate(10, new java.sql.Date(repo.getCreationDate().getTime()));
 	    InsertRepo.setInt(11, repo.getOpenIssueCount());

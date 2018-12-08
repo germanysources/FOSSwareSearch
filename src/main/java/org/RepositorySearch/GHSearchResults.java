@@ -22,11 +22,13 @@ or equipment, and unavailability or interruption of operations.
 */
 package org.RepositorySearch;
 
+import java.util.ArrayList;
 import java.io.IOException;
 import java.sql.SQLException;
 
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHSearchBuilder;
 import org.kohsuke.github.PagedSearchIterable;
 import org.kohsuke.github.PagedIterator;
@@ -39,13 +41,18 @@ import org.RepositorySearch.serialize.SGHRepository;
 public class GHSearchResults{
     protected GitHub account;
     protected SGHRepository serializer; 
-    protected PagedIterator it;
+    protected PagedIterator itRepos, itContent;
     protected Config conf;
-
-    public GHSearchResults(GitHub account)throws IOException, SQLException{
+    protected ArrayList<Integer> scope;
+    
+    /**
+     * @param scope to search (Repositories means description, name, language ...) and/or content
+     */
+    public GHSearchResults(GitHub account, ArrayList<Integer> scope)throws IOException, SQLException{
 	this.account = account;
 	serializer = new SGHRepository(account);
 	conf = Config.getInstance();
+	this.scope = scope;
     }
 
     /**
@@ -63,8 +70,14 @@ public class GHSearchResults{
 	else
 	    sterm = term;
 	
-	PagedSearchIterable sit = account.searchRepositories().q(sterm).list();
-	it = sit._iterator(conf.maxNoResults);
+	if(scope.contains(new Integer(CONSTANT.ScopeRepos))){
+	    PagedSearchIterable sit = account.searchRepositories().q(sterm).list();
+	    itRepos = sit._iterator(conf.maxNoResults);
+	}
+	if(scope.contains(new Integer(CONSTANT.ScopeContent))){
+	    PagedSearchIterable sit = account.searchContent().q(sterm).list();
+	    itContent = sit._iterator(conf.maxNoResults);
+	}
 	return fetch(conf.maxNoResults);
 
     }
@@ -77,10 +90,17 @@ public class GHSearchResults{
     public int fetch(int count)throws IOException, SQLException{
 	
 	int size = 0;
-	while(size < count && it.hasNext()){
+	if(scope.contains(new Integer(CONSTANT.ScopeRepos))){
+	    while(size < count && itRepos.hasNext()){
 	    
-	    serializer.serialize((GHRepository)it.next());
-	    size++;
+		serializer.serialize((GHRepository)itRepos.next());
+		size++;
+	    }
+	}
+	if(scope.contains(new Integer(CONSTANT.ScopeContent))){
+	    while(size < count && itContent.hasNext()){
+		serializer.serialize((GHContent)itContent.next());
+	    }
 	}
 	return size;
 	

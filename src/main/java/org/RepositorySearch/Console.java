@@ -187,4 +187,15 @@ public class Console extends GUIBase{
 
     }
 
+    @Override
+    protected void DisplayContentHeader(){
+	System.out.println(Msg.foundInCode.get());
+    }
+
+    @Override
+    protected void DisplayContentPath(String path, String url){
+	System.out.println(path);
+	System.out.println(url);
+    }
+
 }

@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 
 import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GHException;
 import org.RepositorySearch.serialize.SGHRepository;
 import org.aesh.readline.Readline;
 import org.aesh.readline.ReadlineBuilder;
@@ -218,8 +219,13 @@ public class queryConsole{
     /**
      * Serialize the repositories resulting from an search query
      */
-    private int SearchReposGitHub(String term, boolean AddMyFavorites)throws IOException, SQLException{	
-	return ghres.query(term, AddMyFavorites);
+    private int SearchReposGitHub(String term, boolean AddMyFavorites)throws IOException, SQLException{		
+	try{
+	    return ghres.query(term, AddMyFavorites);
+	}catch(GHException e){
+	    //get the api error message
+	    throw (IOException)e.getCause();
+	}    
 
     }
 

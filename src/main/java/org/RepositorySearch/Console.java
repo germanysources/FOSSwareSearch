@@ -97,6 +97,9 @@ public class Console extends GUIBase{
     @Override
     protected void DisplayRepoPropertie(String label, String value){
 	
+	if(value == null)
+	    return;
+
 	if(label.length()>colWidth[0]){
 	    colWidth[0] = label.length();
 	}
@@ -196,6 +199,11 @@ public class Console extends GUIBase{
     protected void DisplayContentPath(String path, String url){
 	System.out.println(path);
 	System.out.println(url);
+    }
+
+    @Override
+    protected void EndTopics(){
+	System.out.println();
     }
 
 }

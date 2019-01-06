@@ -37,7 +37,7 @@ public enum Msg {
     MandatoryFields("The fields html_url and description are mandatory in this select statement.Please supplie both.\n If you use a as clause, please choose html_url and description as the label."),
     foundInCode("Found in the following files:"),
     ERROR("[ERROR] "),
-    foundResults("Found {0} repositories. Filter or order them with your sql statement."),
+    foundResults("Found {0} results. Filter or order them with your sql statement."),
     resultEmpty("No results found"),
     help("Searchs with apis through open source software provider (github, gitlab).\n Usage:\n python runMain.py [Options] search term \n In the search term you can use spaces.\n You cannot use the options (-h,-na,-hd-c) here, because they are always interpreted as options.\n Options:\n -h print this help\n -na In the configuration file you can add your favorite search extensions\n (for example language:java if you only want to search for java repositories.\n With this option this search extensions is disabled.\n -t GitLab Personal Access Token.\n Options github search scope:\n -h in the header data (name,description ...)\n -c in the file contents\n Default Value: -h header data\n Project Homepage https://github.com/germanysources/FOSSwareSearch\n "),
     noSearchTerm("The search term is missing."),

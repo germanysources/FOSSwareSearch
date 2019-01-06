@@ -32,6 +32,7 @@ import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHSearchBuilder;
 import org.kohsuke.github.PagedSearchIterable;
 import org.kohsuke.github.PagedIterator;
+import org.kohsuke.github.GHException;
 
 import org.RepositorySearch.serialize.SGHRepository;
 
@@ -61,8 +62,9 @@ public class GHSearchResults{
      * @param term The search term. Syntax see {@link https://help.github.com/articles/searching-for-repositories/} 
      * @param AddMyFavorites Favorite addition to the search can be added (for example programming language ...)
      * @returns the number of found entries
+     * @throws GHException if a api error (github) occurs during fetching the results
      */
-    public int query(String term, boolean AddMyFavorites)throws IOException, SQLException{
+    public int query(String term, boolean AddMyFavorites)throws IOException, SQLException, GHException{
 	
 	String sterm;
 	if(AddMyFavorites && conf.FavoriteAdditions != null)
@@ -86,8 +88,9 @@ public class GHSearchResults{
      * This methods fetches the results and attach them to the inmemory database
      * @param count max. numbers of results to fetch
      * @returns found numbers of results
+     * @throws GHException if a api error (github) occurs during fetching the results
      */
-    public int fetch(int count)throws IOException, SQLException{
+    public int fetch(int count)throws IOException, SQLException, GHException{
 	
 	int size = 0;
 	if(scope.contains(new Integer(CONSTANT.ScopeRepos))){
@@ -99,7 +102,8 @@ public class GHSearchResults{
 	}
 	if(scope.contains(new Integer(CONSTANT.ScopeContent))){
 	    while(size < count && itContent.hasNext()){
-		serializer.serialize((GHContent)itContent.next());
+		serializer.serialize((GHContent)itContent.next());		
+		size++;
 	    }
 	}
 	return size;

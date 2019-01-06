@@ -96,10 +96,12 @@ public abstract class GUIBase{
 		    if(!columns.getColumnLabel(j).equals("html_url") 
 		       && !columns.getColumnLabel(j).equals("description")){
 			//return from the timestamp only the date
-			String value;
+			String value = null;
 			if(columns.getColumnType(j) == Types.DATE){
 			    DateFormat df = DateFormat.getDateInstance();
-			    value = df.format(rs.getDate(j));
+			    try{
+				value = df.format(rs.getDate(j));
+			    }catch(NullPointerException e){/*rs.getDate(j) can be null*/}
 			}else{
 			    value = rs.getString(j);
 			}
@@ -133,10 +135,12 @@ public abstract class GUIBase{
 	    BeginTableRow();
 
 	    for(int j=1;j<=columns.getColumnCount();j++){
-		String value;		
+		String value = null;		
 		if(columns.getColumnType(j) == Types.DATE){
-			    DateFormat df = DateFormat.getDateInstance();
-			    value = df.format(rs.getDate(j));
+		    DateFormat df = DateFormat.getDateInstance();
+		    try{
+			value = df.format(rs.getDate(j));
+		    }catch(NullPointerException e){/*rs.getDate(j) can be null*/}
 		}else{
 		    value = rs.getString(j);
 		}
@@ -155,6 +159,7 @@ public abstract class GUIBase{
 	while(rs.next()){
 	    DisplayTopic(rs.getString(1));
 	}
+	EndTopics();
 
     }
 
@@ -196,5 +201,7 @@ public abstract class GUIBase{
     protected abstract void DisplayContentHeader();
 
     protected abstract void DisplayContentPath(String path, String url);
+    
+    protected abstract void EndTopics();    
 
 }

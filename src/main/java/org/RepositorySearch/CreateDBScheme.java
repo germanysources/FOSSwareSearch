@@ -53,11 +53,12 @@ public class CreateDBScheme{
 	
 	//html url is extern visible url (for example https://github.com/kohsuke/github-api
 	stmt.executeUpdate("create table Repositories(html_url string, license_key string, license_description string, description string, planguage string, homepage string, star_count integer, forks_count integer, last_activity datetime, created_at datetime, open_issues integer, score integer)");
+	stmt.executeUpdate("create unique index rurl on Repositories(html_url)");
 
 	stmt.executeUpdate("create table RepositoryTopics(html_url string, topic string, foreign key(html_url) references Repositories(html_url))");
 	stmt.executeUpdate("create unique index turl on RepositoryTopics(html_url, topic)");	
 	
-	//The file path for content to find
+	/*content searching html_url is the html url of the repository i.e. https://github.com/kohsuke/github-api, path the relative file path, content_url the file content viewed in github ui*/
 	stmt.executeUpdate("create table RepositoryContent(html_url string, path string, content_url string, foreign key(html_url) references Repositories(html_url))");
 	stmt.executeUpdate("create unique index curl on RepositoryContent(html_url, path)");
 

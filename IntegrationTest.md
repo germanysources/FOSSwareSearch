@@ -18,5 +18,6 @@ The integration test is done manually.
 * Search scope
   a. default header data
   b. search in header data
-  c. search in content
+  c. search in content with exception (missing repo, user or organization)
+  d. search in content sucessfully (concatenation of search query)
   e. search in both

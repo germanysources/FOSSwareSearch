@@ -42,7 +42,8 @@ import org.RepositorySearch.CreateDBScheme;
 public class SGHRepository{
     
     private Connection con;
-    private PreparedStatement InsertRepo, InsertTopic, InsertContent;
+    //InsertRepoShort only html_url and description are put into table Repositories
+    private PreparedStatement InsertRepo, InsertTopic, InsertContent, InsertRepoShort;
     private GHTopics readerTopics;
 
     /**
@@ -66,6 +67,7 @@ public class SGHRepository{
     private void prepareStatements()throws SQLException{
 
 	InsertRepo = con.prepareStatement("insert into Repositories(html_url, license_key, license_description, description, planguage, homepage, star_count, forks_count, last_activity, created_at, open_issues, score) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ");
+	InsertRepoShort = con.prepareStatement("insert into Repositories(html_url,description) values(?,?)");
 	InsertTopic = con.prepareStatement("insert into RepositoryTopics values(?, ?)");
 	InsertContent = con.prepareStatement("insert into RepositoryContent values(?,?,?)");
 
@@ -74,6 +76,7 @@ public class SGHRepository{
     private void closeStatements()throws SQLException{
 	
 	InsertRepo.close();
+	InsertRepoShort.close();
 	InsertTopic.close();
 	InsertContent.close();
 
@@ -85,17 +88,29 @@ public class SGHRepository{
      */
     public synchronized void serialize(GHContent content)throws SQLException, IOException{
 	
-	try{
-	    serialize(content.getOwner());
-	}catch(SQLException e){	    
-	    //a repository can occur more then one time
+	/*only full_name, description and the ui html url (relevant fields) are present 
+	  in the content.getOwner object
+	 */
+	InsertRepoShort.setString(1, content.getOwner().getHtmlUrlString());
+	InsertRepoShort.setString(2, content.getOwner().getDescription());
+
+	try{	    
+	    InsertRepoShort.execute();
+	    InsertTopics(content.getOwner());
+	}catch(SQLException e){
+	    //more then one file per repository can be found the index rurl is not unique anymore
+	    closeStatements();
+	    prepareStatements();
 	}
+
 	InsertContent.setString(1, content.getOwner().getHtmlUrlString());
 	InsertContent.setString(2, content.getPath());
 	InsertContent.setString(3, content.getHtmlUrl());
+	
 	try{
 	    InsertContent.execute();
 	}catch(SQLException e){	    
+	    //the search query can occur more than one time in one file
 	    closeStatements();
 	    prepareStatements();
 	}
@@ -122,22 +137,15 @@ public class SGHRepository{
 	    InsertRepo.setString(6, repo.getHomepage());
 	    InsertRepo.setInt(7, repo.getStargazersCount());
 	    InsertRepo.setInt(8, repo.getForks());
-	    //@todo NullPointerException when serialize from Content
 	    InsertRepo.setDate(9, new java.sql.Date(repo.getUpdatedAt().getTime()));
 	    InsertRepo.setDate(10, new java.sql.Date(repo.getCreationDate().getTime()));
 	    InsertRepo.setInt(11, repo.getOpenIssueCount());
 	    InsertRepo.setFloat(12, new Float(repo.getScore()).intValue());
 	    InsertRepo.execute();
+	    InsertTopics(repo);
 	    
-	    //get the topics
-	    String on[] = repo.getFullName().split("/");
-	    for(String topic:readerTopics.getAll(on[0], on[1])){
-		InsertTopic.setString(1, repo.getHtmlUrlString());
-		InsertTopic.setString(2, topic);
-		InsertTopic.execute();
-	    }
 	}catch(SQLException e){
-	    //close the statements and open them again, otherwise SQLException would throw
+	    //close the statements and open them again, otherwise SQLException statement is not executing would be thrown
 	    //in the next run
 	    closeStatements();
 	    prepareStatements();
@@ -147,6 +155,17 @@ public class SGHRepository{
 
     }
 
+    //insert the topics for a repository into the table RepositoryTopics
+    private void InsertTopics(GHRepository repo)throws IOException, SQLException{
+	//get the topics
+	String on[] = repo.getFullName().split("/");
+	for(String topic:readerTopics.getAll(on[0], on[1])){
+	    InsertTopic.setString(1, repo.getHtmlUrlString());
+	    InsertTopic.setString(2, topic);
+	    InsertTopic.execute();
+	}
+
+    }
     
 
 }

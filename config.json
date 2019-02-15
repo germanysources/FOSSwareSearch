@@ -1,1 +1,1 @@
-{"maxNoResults":3, "HostingProvider":[1], "InitialSQLQuery":"select * from Repositories order by score view block limit 5"}
+{"maxNoResults":5, "HostingProvider":[1], "InitialSQLQuery":"select * from Repositories order by score view block limit 5"}

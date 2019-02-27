@@ -53,8 +53,9 @@ public class queryConsole{
      * @param args can contain the options {-na} and the search term.
      * The search term contains spaces by default. So first the java engine spilt the search terms and we must concatenate it again.
      */
-    public static void main(String[] args){
+    public static void main(String[] args)throws IOException{
 
+	ClassPathHack.addDependencies();
 	RSLogger.getInstance();
 	Msg.loadFromDisk();	
 	ArrayList<Integer> scope = new ArrayList<Integer>();

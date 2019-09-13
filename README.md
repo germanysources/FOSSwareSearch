@@ -168,6 +168,11 @@ starting the application.
 * **InitialSQLQuery**: The sql query, which is executed after we received the
 results from the hosting providers.
 
+### SQLite
+The sqlite-driver needs a temporary-directory. If the folder /tmp is not
+writeable, you can use the enviroment-variable ```ORG_SQLITE_TMPDIR``` to set
+an other tmporary-directory.
+
 ## Build ##
 ### Dependencies ###
 Maven is used for building the java part. Except the artifact:

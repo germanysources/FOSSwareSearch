@@ -1,5 +1,6 @@
 package org.RepositorySearch;
 
+import java.util.ArrayList;
 import java.util.regex.MatchResult;
 import java.sql.SQLException;
 import org.junit.Test;
@@ -9,11 +10,14 @@ import org.junit.BeforeClass;
 
 public class TestConsole{
    
+    //class under test
     static queryConsole qu;
 
     @BeforeClass
     public static void setup()throws Exception{
-	qu = new queryConsole();
+	ArrayList<Integer> scope = new ArrayList<Integer>();
+	scope.add(new Integer(CONSTANT.ScopeRepos));
+	qu = new queryConsole(scope);
     }
 
     /**

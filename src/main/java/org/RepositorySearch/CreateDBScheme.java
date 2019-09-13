@@ -40,10 +40,22 @@ public class CreateDBScheme{
 
     public static Connection getConnection()throws SQLException{
 	if(con == null || con.isClosed()){
+	    setSQLiteTmpDir();
 	    con = DriverManager.getConnection("jdbc:sqlite:file::memory:?cache=shared");	
 	}
 	return con;
 
+    }
+
+    /*if the files in the /tmp folder cannot be executed,
+     here the sqlite tmp directory can be set*/
+    private static void setSQLiteTmpDir(){  
+
+	try{
+            System.setProperty("org.sqlite.tmpdir",System.getenv("ORG_SQLITE_TMPDIR"));
+        }catch(NullPointerException allowed){
+            //environment variable ORG_SQLITE_TMPDIR can be null
+        }
     }
 
     public static void forRepository()throws SQLException{

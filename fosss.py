@@ -52,7 +52,7 @@ for i in range(len(sys.argv)):
 
 execute([
     'java -cp \"%s\"' % classpath_sep.join(jars),
-    '-Djava.library.path=.',
+    '-Djava.library.path=%s' % platform.machine(),
     '-Djava.util.logging.config.file=log.properties',
     javaclass,
     searchTerm,

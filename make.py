@@ -48,13 +48,18 @@ include.append('-I\"'+join(os.environ['JAVA_HOME'], 'include')+'\"')
 
 execute([javah, '-classpath', classpath, '-o', HeaderFile, 'org.RepositorySearch.Console'])
 
+#make directory for compiled-library
+if not os.access(platform.machine(), os.F_OK):
+    os.mkdir(platform.machine())
+
+
 output = ''
 gcc_command = ''
 if is_windows:
-    output = 'ConsoleWidth.dll'
+    output = join(platform.machine(), 'ConsoleWidth.dll')
     gcc_command = 'gcc -Wl,--add-stdcall-alias'
 else:
-    output = 'libConsoleWidth.so'
+    output = join(platform.machine(), 'libConsoleWidth.so')
     gcc_command = 'gcc -std=c99 -fPIC'
 
 execute([gcc_command,  

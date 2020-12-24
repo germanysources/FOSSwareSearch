@@ -175,27 +175,8 @@ an other tmporary-directory.
 
 ## Build ##
 ### Dependencies ###
-Maven is used for building the java part. Except the artifact:
-```xml
-    <dependency>
-      <groupId>org.kohsuke</groupId>
-      <artifactId>github-api</artifactId>
-      <version>1.96</version>
-    </dependency>
-```
-all dependencies are available in the central maven repository.
-
-The artifact github-api version 1.96 is compiled from the source code of the
-fork
-[germanysources/github-api](https://github.com/germanysources/github-api). This
-fork contains some necessary extensions for this application. The pull request
-[#463](https://github.com/kohsuke/github-api/pull/463) to the parent repository is still open. When it is included in the
-parent repository, this dependency will be available in the central maven
-repository.
-
-Now we can download the fork, install it one the local machine with the
-command ```mvn install```. Then the java part can be build.
-
+Maven is used for building the java part.
+All dependencies are available in the central maven repository.
 
 ### C part ###
 The application contains a short native c part. This must be build extra with
@@ -220,5 +201,5 @@ For further information see [CONTRIBUTING.md](https://github.com/germanysources/
 ## Need help or have feedback? ##
 * Open an issue in the
 [issue tracker](https://github.com/germanysources/FOSSwareSearch/issues) for this repository
-* Ask a question on [stackoverflow](https://stackoverflow.com/questions/tagged/github-api-v3) tag github-api-v3
+
 

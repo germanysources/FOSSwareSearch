@@ -120,7 +120,7 @@ public class queryConsole{
      * Serialize a single repository at github
      */
     private void SingleRepoGitHub(String fullName)throws IOException, SQLException{
-	SGHRepository ser = new SGHRepository(ghaccount);
+	SGHRepository ser = new SGHRepository();
 	ser.serialize(ghaccount.getRepository(fullName));
 	Readline readline = ReadlineBuilder.builder().enableHistory(true).build();
 	Console con = new Console();

@@ -51,7 +51,7 @@ public class GHSearchResults{
      */
     public GHSearchResults(GitHub account, ArrayList<Integer> scope)throws IOException, SQLException{
 	this.account = account;
-	serializer = new SGHRepository(account);
+	serializer = new SGHRepository();
 	conf = Config.getInstance();
 	this.scope = scope;
     }

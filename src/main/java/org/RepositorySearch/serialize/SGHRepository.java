@@ -31,7 +31,6 @@ import java.sql.Types;
 
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHContent;
-import org.kohsuke.github.GHTopics;
 import org.kohsuke.github.GitHub;
 
 import org.RepositorySearch.CreateDBScheme;
@@ -44,29 +43,18 @@ public class SGHRepository{
     private Connection con;
     //InsertRepoShort only html_url and description are put into table Repositories
     private PreparedStatement InsertRepo, InsertTopic, InsertContent, InsertRepoShort;
-    private GHTopics readerTopics;
 
     /**
-     * Create the prepared statements for insert operations in the constructor. For productiv use.
+     * Create the prepared statements for insert operations in the constructor.
      */
-    public SGHRepository(GitHub account)throws SQLException{	
-	readerTopics = new GHTopics(account);
-	con = CreateDBScheme.getConnection();
-	prepareStatements();
-    }
-
-    /**
-     * Create the prepared statements for insert operations in the constructor. For use in unit-test.
-     */
-    public SGHRepository(GHTopics tops)throws SQLException{
-	readerTopics = tops;
+    public SGHRepository()throws SQLException{
 	con = CreateDBScheme.getConnection();
 	prepareStatements();
     }
 
     private void prepareStatements()throws SQLException{
 
-	InsertRepo = con.prepareStatement("insert into Repositories(html_url, license_key, license_description, description, planguage, homepage, star_count, forks_count, last_activity, created_at, open_issues, score) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ");
+	InsertRepo = con.prepareStatement("insert into Repositories(html_url, license_key, license_description, description, planguage, homepage, star_count, forks_count, last_activity, created_at, open_issues) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ");
 	InsertRepoShort = con.prepareStatement("insert into Repositories(html_url,description) values(?,?)");
 	InsertTopic = con.prepareStatement("insert into RepositoryTopics values(?, ?)");
 	InsertContent = con.prepareStatement("insert into RepositoryContent values(?,?,?)");
@@ -91,7 +79,7 @@ public class SGHRepository{
 	/*only full_name, description and the ui html url (relevant fields) are present 
 	  in the content.getOwner object
 	 */
-	InsertRepoShort.setString(1, content.getOwner().getHtmlUrlString());
+	InsertRepoShort.setString(1, content.getOwner().getHtmlUrl().toString());
 	InsertRepoShort.setString(2, content.getOwner().getDescription());
 
 	try{	    
@@ -103,7 +91,7 @@ public class SGHRepository{
 	    prepareStatements();
 	}
 
-	InsertContent.setString(1, content.getOwner().getHtmlUrlString());
+	InsertContent.setString(1, content.getOwner().getHtmlUrl().toString());
 	InsertContent.setString(2, content.getPath());
 	InsertContent.setString(3, content.getHtmlUrl());
 	
@@ -123,10 +111,10 @@ public class SGHRepository{
      */
     public synchronized void serialize(GHRepository repo)throws SQLException, IOException{
 	try{
-	    InsertRepo.setString(1, repo.getHtmlUrlString());
+	    InsertRepo.setString(1, repo.getHtmlUrl().toString());
 	    try{
-		InsertRepo.setString(2, repo.getLicenseKey().getKey());
-		InsertRepo.setString(3, repo.getLicenseKey().getName());
+		InsertRepo.setString(2, repo.getLicense().getKey());
+		InsertRepo.setString(3, repo.getLicense().getName());
 	    }catch(NullPointerException e){
 		//if license is unknown
 		InsertRepo.setNull(2, Types.VARCHAR);
@@ -138,9 +126,8 @@ public class SGHRepository{
 	    InsertRepo.setInt(7, repo.getStargazersCount());
 	    InsertRepo.setInt(8, repo.getForks());
 	    InsertRepo.setDate(9, new java.sql.Date(repo.getUpdatedAt().getTime()));
-	    InsertRepo.setDate(10, new java.sql.Date(repo.getCreationDate().getTime()));
+	    InsertRepo.setDate(10, new java.sql.Date(repo.getCreatedAt().getTime()));
 	    InsertRepo.setInt(11, repo.getOpenIssueCount());
-	    InsertRepo.setFloat(12, new Float(repo.getScore()).intValue());
 	    InsertRepo.execute();
 	    InsertTopics(repo);
 	    
@@ -157,13 +144,11 @@ public class SGHRepository{
 
     //insert the topics for a repository into the table RepositoryTopics
     private void InsertTopics(GHRepository repo)throws IOException, SQLException{
-	//get the topics
-	String on[] = repo.getFullName().split("/");
-	for(String topic:readerTopics.getAll(on[0], on[1])){
-	    InsertTopic.setString(1, repo.getHtmlUrlString());
+	for(String topic: repo.listTopics()){
+	    InsertTopic.setString(1, repo.getHtmlUrl().toString());
 	    InsertTopic.setString(2, topic);
 	    InsertTopic.execute();
-	}
+        };
 
     }
     

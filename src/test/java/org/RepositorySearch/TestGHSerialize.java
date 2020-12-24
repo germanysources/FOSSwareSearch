@@ -22,58 +22,46 @@ or equipment, and unavailability or interruption of operations.
 */
 package org.RepositorySearch.serialize;
 
+import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 
-import java.util.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.io.File;
-import java.nio.file.*;
 
-import org.kohsuke.github.GHTopics;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 import org.RepositorySearch.CreateDBScheme;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.core.JsonParseException;
 
-@Ignore
 public class TestGHSerialize{
 
     //class under test
-    private SGHRepository ref;
-    private ObjectMapper mapper;
-    
-    //private static Path testPath;
+    private SGHRepository cut;
 
     @BeforeClass
     public static void csetup()throws SQLException{
 	CreateDBScheme.forRepository();
-	//testPath = FileSystems.getDefault().getPath("src", "test", "resources", "mockRepository.json");
-    }     
-    
+    }
+
     @Before
-    public void setUp() {
-	mapper = new ObjectMapper();
+    public void setup()throws Exception{
+	cut = new SGHRepository();
     }
 
-
-    public TestGHSerialize()throws Exception{
-	ref = new SGHRepository(GitHub.connectAnonymously());
-    }
-        
-    //test only for sql exceptions
     @Test
     public void serialize()throws Exception{
 	
-	//create Repository directly
-	GHRepository repo = GitHub.connect().getRepository("germanysources/mockup_loader");
+	GHRepository repo = GitHub.connect().getRepository("germanysources/FOSSWareSearch");
 	
-	ref.serialize(repo);
-	
+	cut.serialize(repo);
+
+	Connection con = CreateDBScheme.getConnection();
+        ResultSet resultSet = con.createStatement().executeQuery("select html_url from Repositories");
+        resultSet.first();
+        assertTrue(resultSet.isLast());
+        assertEquals("https://github.com/germanysources/FOSSWareSearch", resultSet.getString(1));
     }
 
 }

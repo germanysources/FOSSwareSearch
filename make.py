@@ -25,12 +25,16 @@ import os, platform
 from os.path import join
 import sys
 
+if len(sys.argv) == 2 and sys.argv[1] == '-h':
+    print('Usage: {0} <gcc options>'.format(sys.argv[0]))
+    exit(0)
+
 def execute(cmd_parts):
     print(' '.join(cmd_parts))
     os.system(' '.join(cmd_parts))
 
 is_windows = 'windows' in platform.system().lower()
-javah = join(os.environ['JAVA_HOME'], 'bin', 'javah')
+javah = '"' + join(os.environ['JAVA_HOME'], 'bin', 'javah') + '"'
 classpath=join('target', 'classes')
 
 HeaderFile=join('src', 'main', 'nativeC', 'Console.h')
@@ -55,12 +59,16 @@ if not os.access(platform.machine(), os.F_OK):
 
 output = ''
 gcc_command = ''
+options = ''
+for i in range(1, len(sys.argv)):
+    options += sys.argv[i]
+
 if is_windows:
     output = join(platform.machine(), 'ConsoleWidth.dll')
-    gcc_command = 'gcc -Wl,--add-stdcall-alias'
+    gcc_command = 'gcc {0} -std=c99 -Wl,--add-stdcall-alias'.format(options)
 else:
     output = join(platform.machine(), 'libConsoleWidth.so')
-    gcc_command = 'gcc -std=c99 -fPIC'
+    gcc_command = 'gcc {0} -std=c99 -fPIC'.format(options)
 
 execute([gcc_command,  
          ' '.join(include),

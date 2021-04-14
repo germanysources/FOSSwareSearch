@@ -183,6 +183,8 @@ The application contains a short native c part. This must be build extra with
 the python script
 [make.py](https://github.com/germanysources/FOSSwareSearch/blob/master/make.py). The
 python script should compile, if gcc is installed.
+#### Compile for 64-bit ####
+`python make.py -m64`
 
 ## Notes ##
 This application uses preview features from the [github api v3](https://developer.github.com/v3/). This preview

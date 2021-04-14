@@ -85,6 +85,10 @@ this repository.
 
 After the executing the sql query, we can type the next sql query or the command ```exit``` to quit the application.
 
+## Proxy settings ##
+The proxy settings are coming from Java virtual machine proxy settings (see https://docs.oracle.com/javase/8/docs/api/java/net/doc-files/net-properties.html#Proxies). 
+Set them in the file $JAVA_HOME/lib/net.properties or supply them to the python-bootstrap-scripts (`fosss.py` or `runMain.py`).
+
 ## SQL Syntax ##
 The complete syntax of [sqlite](www.sqlite.org) is supported.
 
